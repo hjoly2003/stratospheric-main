@@ -1,0 +1,96 @@
+# [N] This file defines the service stack. We call it “service stack” because it describes an ECS task and an ECS service that spins up Docker containers and does some magic to make them available via the internet.
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploys a Docker container within a previously created VPC. Requires a running network stack.
+# [N] Within the Parameters section, we can define input parameters to a stack.
+Parameters:
+  # [N] The name of an existing network stack, for example, so that we can refer to its output parameters.
+  NetworkStackName:
+    Type: String
+    Description: The name of the networking stack that
+      these resources are put into.
+  ServiceName:
+    Type: String
+    Description: A human-readable name for the service.
+  # [N] A URL pointing to the Docker image we want to deploy.
+  ImageUrl:
+    Type: String
+    Description: The url of a docker image that will handle incoming traffic.
+  ContainerPort:
+    Type: Number
+    Default: 80
+    Description: The port number the application inside the docker container
+      is binding to.
+  ContainerCpu:
+    Type: Number
+    Default: 256
+    Description: How much CPU to give the container. 1024 is 1 CPU.
+  ContainerMemory:
+    Type: Number
+    Default: 512
+    Description: How much memory in megabytes to give the container.
+  DesiredCount:
+    Type: Number
+    Default: 1
+    Description: How many copies of the service task to run.
+
+# [N] The resources that the service stack deploys.
+Resources:
+
+  # [N] A container for the logs of our application.
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref 'ServiceName'
+      RetentionInDays: 1
+
+  # [N] The definition for an ECS task. The task will pull one or more Docker images from URLs and run them.
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Ref 'ServiceName'
+      Cpu: !Ref 'ContainerCpu'
+      Memory: !Ref 'ContainerMemory'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn:
+        # [N] Fn:ImportValue imports an output value exported by another stack. Since we have included the network stack name in the name of its outputs, we need to join the network stack name with the output parameter name to get the right value.
+        Fn::ImportValue:
+          !Join [':', [!Ref 'NetworkStackName', 'ECSTaskExecutionRole']]
+      ContainerDefinitions:
+        - Name: !Ref 'ServiceName'
+          Cpu: !Ref 'ContainerCpu'
+          Memory: !Ref 'ContainerMemory'
+          Image: !Ref 'ImageUrl'
+          PortMappings:
+            - ContainerPort: !Ref 'ContainerPort'
+          LogConfiguration:
+            LogDriver: 'awslogs'
+            Options:
+              awslogs-group: !Ref 'ServiceName'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: !Ref 'ServiceName'
+
+  # [N] An ECS service that provides some logic around a task definition, like how many instances should run in parallel and if they should be assigned public IP addresses.
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref 'ServiceName'
+      Cluster:
+        Fn::ImportValue:
+          !Join [':', [!Ref 'NetworkStackName', 'ClusterName']]
+      LaunchType: FARGATE
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: !Ref 'DesiredCount'
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - Fn::ImportValue:
+                !Join [':', [!Ref 'NetworkStackName', 'ECSSecurityGroup']]
+          Subnets:
+            - Fn::ImportValue:
+                !Join [':', [!Ref 'NetworkStackName', 'PublicSubnet']]
+      TaskDefinition: !Ref 'TaskDefinition'

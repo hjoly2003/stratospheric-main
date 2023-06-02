@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    aws:
+      region:
+        static: eu-central-1
+
+server:
+  forward-headers-strategy: framework
+
+custom:
+  invitation-codes: DUKE, STRATOSPHERIC

@@ -1,0 +1,43 @@
+# [N]:chap7 - A workflow that deploys a network.
+# This workflow creates all environment-specific resources that are shared across applications.
+# This needs to run before creating an application-specific environment.
+name: 02 - Manually create a shared environment
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+on:
+  workflow_dispatch:
+    # [N]:chap7 - Defines an input parameter. To see it in action, get to https://github.com/hjoly2003/stratos-chapter-7/actions/workflows/02-create-environment.yml and click the "Run workflow" button.
+    inputs:
+      environmentName:
+        description: 'The name of the environment to create.'
+        required: true
+        default: 'staging'
+jobs:
+  deploy-network-stack:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-20.04
+    name: Deploy the network stack
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'maven'
+
+      - name: NPM install
+        working-directory: cdk
+        run: npm install
+
+      # [N]:chap7 - The main step calls the network:deploy command of the CDK project (see stratos-chapter-7/cdk/package.json). We pass an input parameter into the environmentName parameter.
+      - name: Deploy network stack
+        working-directory: cdk
+        run: npm run network:deploy -- -c environmentName=${{ github.event.inputs.environmentName }}

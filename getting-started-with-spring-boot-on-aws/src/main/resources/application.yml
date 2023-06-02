@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: demo-application
+  config:
+    import: 'aws-parameterstore:/config/app'
+  cloud:
+    aws:
+      credentials:
+        profile:
+          name: stratospheric
+      region:
+        static: eu-central-1
+
+custom:
+  bucket-name: stratospheric-demo-application
+

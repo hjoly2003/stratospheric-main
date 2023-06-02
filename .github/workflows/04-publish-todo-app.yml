@@ -1,0 +1,130 @@
+# [N]:chap7 - This workflow builds the Docker image for the Todo-App and then deploys the application.
+name: 04 - Publish Todo-App
+
+env:
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+# [N]:chap7 - Triggered by a push to the codebase.
+on:
+  push:
+    # [N]:chap7 - Configured to only trigger when something changes within the application folder and or in some select files in our cdk folder.
+    paths:
+      - 'application/**'
+      - 'cdk/**/*Service*'
+      - 'cdk/pom.xml'
+      - '.github/workflows/04-publish-todo-app.yml'
+  workflow_dispatch:
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-20.04
+    name: Build and publish Todo App
+    outputs:
+      dockerImageTag: ${{ steps.dockerImageTag.outputs.tag }}
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Build application
+        working-directory: application
+        run: ./gradlew build --stacktrace
+
+      - name: Zip build reports
+        if: always()
+        run: zip -r reports.zip **/build/reports
+
+      - name: Upload build reports
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: reports
+          path: reports.zip
+
+      # [N]:chap7 - For creating a tag for the Docker image. The “Create Docker image tag” step just builds a string from the current date and time and the Git commit SHA hash. We can use that string to uniquely tag our Docker image.
+      - name: Create Docker image tag
+        id: dockerImageTag
+        run: echo "tag=$(date +'%Y%m%d%H%M%S')-${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+      # [N]:chap7 - For creating and publishing the Docker image to an ECR repository.
+      - name: Publish Docker image to ECR registry
+        if: github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, 'DEPLOY NOW')
+        env:
+          DOCKER_IMAGE_TAG: ${{ steps.dockerImageTag.outputs.tag }}
+        working-directory: application
+        # * create a Docker image from the Dockerfile in the application folder,
+        # * tag that image with the Docker image tag created in the previous step,
+        # * also tag that image with the latest tag,
+        # * [?] How this thing works? - get the login credentials for our ECR repository,
+        # * use these credentials to have Docker login to that ECR repository [?], and finally,
+        # * push the image and both tags to the repository.
+        run: |
+          docker build -t todo-app .
+          docker tag todo-app ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/todo-app:${DOCKER_IMAGE_TAG}
+          docker tag todo-app ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/todo-app:latest
+          aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+          docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/todo-app:${DOCKER_IMAGE_TAG}
+          docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/todo-app:latest
+
+# [N]:chap7]:jobqueue - This SQS event-sending step needs to be uncommented if we need to activate the job queue. If it ever need to be uncommented, we need to replace the Amazon account_ID and region in the --queue-url.
+#      Superseded by GitHub Action's concurrency support, see below
+#      - name: Sending deployment event to queue
+#        if: github.ref == 'refs/heads/main'
+#        env:
+#          DOCKER_IMAGE_TAG: ${{ steps.dockerImageTag.outputs.tag }}
+#        run: |
+#          export EVENT_PAYLOAD="{\"commitSha\": \"$GITHUB_SHA\", \"ref\": \"main\", \"owner\": \"stratospheric-dev\", \"repo\": \"stratospheric\", \"workflowId\": \"05-update-todo-app-in-staging.yml\", \"dockerImageTag\": \"$DOCKER_IMAGE_TAG\"}"
+#          aws sqs send-message \
+#            --queue-url=https://sqs.eu-central-1.amazonaws.com/221875718260/todo-app-deploymentsQueue.fifo \
+#          #  --queue-url=https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}/todo-app-deploymentsQueue.fifo \
+#            --message-group-id default \
+#            --message-deduplication-id $GITHUB_SHA \
+#            --message-body "$EVENT_PAYLOAD"
+
+  # [N]:chap7 - The "deploy" job is also defined in the workflow 05-update-todo-app-in-staging.yml. This job needs to be commented out if we need to activate the job queue.
+  deploy:
+    runs-on: ubuntu-20.04
+    name: Deploy Todo App
+    needs: build-and-publish
+    timeout-minutes: 15
+    if: github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, 'DEPLOY NOW')
+    concurrency: todo-application-deployment
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'maven'
+
+      - name: NPM install
+        working-directory: cdk
+        run: npm install
+
+      # [N]:chap7 - Calls the CDK project to deploy that Docker image into the infrastructure we’ve created earlier.
+      - name: Deploy service stack
+        # [!]:book - if : github.ref == 'refs/heads/main'  
+        working-directory: cdk
+        # [!]:book - run: npm run service:deploy -- -c environmentName=staging -c applicationName=todo-app -c dockerImageTag=${GITHUB_RUN_NUMBER}
+        run: npm run service:deploy -- -c dockerImageTag=${{ needs.build-and-publish.outputs.dockerImageTag }}
+
+      # Each Service stack updates creates a new parameter stack that CloudFormation does not clean up for us.
+      # This step deletes all "*Service-Parameters*" stacks except the latest one to keep the house clean.
+      - name: Clean up old parameter stacks
+        working-directory: cdk
+        run: |
+          aws cloudformation describe-stacks --region eu-central-1 --query "Stacks[].StackName" --output text | sed -e "s/\s\+/\n/g" | grep -e "staging-todo-app-Service-Parameters" | sort -r | tail -n+2 > stacks_to_be_deleted.txt
+          for stack in $(cat stacks_to_be_deleted.txt); do aws cloudformation delete-stack --stack-name $stack --region eu-central-1;  done

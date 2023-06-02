@@ -1,0 +1,21 @@
+name: Feedback for the sample application
+description: "Everything related to the sample Todo application: bugs, improvements, AWS infrastructure setup issues, etc."
+labels: [ "application-feedback", "triage" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to provide feedback and improve the overall quality of Stratospheric!
+  - type: textarea
+    id: whats-wrong
+    attributes:
+      label: "What's going wrong and not working?"
+      description: "Try to be as specific as possible and mention what you tried. If possible, provide a minimal, reproducible example"
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-change
+    attributes:
+      label: "Expected outcome"
+      description: What is your expectation?
+
