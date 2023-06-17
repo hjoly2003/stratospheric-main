@@ -25,9 +25,9 @@ Check the parameters inside the cdk.json (most importantly, set the account ID t
 
 ```bash
 cd chapter-6/cdk
-run repository:deploy 
-run network:deploy 
-run service:deploy
+npm run repository:deploy 
+npm run network:deploy 
+npm run service:deploy
 ```
 
 Then, have a look around in the AWS Console to see the resources those
@@ -36,7 +36,7 @@ commands created.
 Don't forget to delete the stacks afterward:
 
 ```bash
-run service:destroy
-run network:destroy
-run repository:destroy
+npm run service:destroy
+npm run network:destroy
+npm run repository:destroy
 ```
