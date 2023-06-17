@@ -15,7 +15,7 @@ import software.amazon.awscdk.services.route53.IHostedZone;
 import software.constructs.Construct;
 
 /**
- * [N]:part-I-addendum
+ * [N]:part-I-addendum]:cert
  */
 public class CertificateStack extends Stack {
 
