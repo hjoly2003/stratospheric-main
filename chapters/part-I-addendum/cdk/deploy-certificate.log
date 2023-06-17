@@ -1,0 +1,229 @@
+utilisationnormale@Mini-de-Hugues cdk % npm run certificate:deploy                         
+
+> stratospheric-cdk@0.1.0 certificate:deploy
+> cdk deploy --verbose --debug --app "./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CertificateApp" --require-approval never
+
+[13:27:11] CDK toolkit version: 2.81.0 (build bd920f2)
+[13:27:11] Command line arguments: {
+  _: [ 'deploy' ],
+  verbose: 1,
+  v: 1,
+  debug: true,
+  app: './mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CertificateApp',
+  a: './mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CertificateApp',
+  'require-approval': 'never',
+  requireApproval: 'never',
+  lookups: true,
+  'ignore-errors': false,
+  ignoreErrors: false,
+  json: false,
+  j: false,
+  ec2creds: undefined,
+  i: undefined,
+  'version-reporting': undefined,
+  versionReporting: undefined,
+  'path-metadata': undefined,
+  pathMetadata: undefined,
+  'asset-metadata': undefined,
+  assetMetadata: undefined,
+  'role-arn': undefined,
+  r: undefined,
+  roleArn: undefined,
+  staging: true,
+  'no-color': false,
+  noColor: false,
+  ci: false,
+  all: false,
+  'build-exclude': [],
+  E: [],
+  buildExclude: [],
+  force: false,
+  f: false,
+  parameters: [ {} ],
+  'previous-parameters': true,
+  previousParameters: true,
+  logs: true,
+  concurrency: 1,
+  'asset-prebuild': true,
+  assetPrebuild: true,
+  '$0': '/opt/homebrew/bin/cdk'
+}
+[13:27:11] cdk.json: {
+  "context": {
+    "applicationName": "todo-app",
+    "region": "us-east-1",
+    "accountId": "254857894179",
+    "springProfile": "aws",
+    "environmentName": "staging",
+    "applicationDomain": "app.hjoly_stratos.dev",
+    "hostedZoneDomain": "hjoly_stratos.dev",
+    "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
+  }
+}
+[13:27:11] cdk.context.json: {
+  "availability-zones:account=494365134671:region=ap-southeast-2": [
+    "ap-southeast-2a",
+    "ap-southeast-2b",
+    "ap-southeast-2c"
+  ],
+  "availability-zones:account=221875718260:region=eu-central-1": [
+    "eu-central-1a",
+    "eu-central-1b",
+    "eu-central-1c"
+  ],
+  "availability-zones:account=254857894179:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ]
+}
+[13:27:11] merged settings: {
+  versionReporting: true,
+  assetMetadata: true,
+  pathMetadata: true,
+  output: 'cdk.out',
+  context: {
+    applicationName: 'todo-app',
+    region: 'us-east-1',
+    accountId: '254857894179',
+    springProfile: 'aws',
+    environmentName: 'staging',
+    applicationDomain: 'app.hjoly_stratos.dev',
+    hostedZoneDomain: 'hjoly_stratos.dev',
+    dockerImageUrl: 'docker.io/hjolydocker/todo-app-v1:latest'
+  },
+  app: './mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CertificateApp',
+  debug: true,
+  requireApproval: 'never',
+  toolkitBucket: {},
+  staging: true,
+  bundlingStacks: [ '**' ],
+  lookups: true,
+  assetPrebuild: true
+}
+[13:27:11] Determining if we're on an EC2 instance.
+[13:27:11] Does not look like an EC2 instance.
+[13:27:11] Toolkit stack: CDKToolkit
+[13:27:11] Setting "CDK_DEFAULT_REGION" environment variable to us-east-1
+[13:27:11] Resolving default credentials
+[13:27:11] Reading cached notices from /Users/utilisationnormale/.cdk/cache/notices.json
+[13:27:11] Retrieved account ID 254857894179 from disk cache
+[13:27:11] Setting "CDK_DEFAULT_ACCOUNT" environment variable to 254857894179
+[13:27:11] context: {
+  'availability-zones:account=494365134671:region=ap-southeast-2': [ 'ap-southeast-2a', 'ap-southeast-2b', 'ap-southeast-2c' ],
+  'availability-zones:account=221875718260:region=eu-central-1': [ 'eu-central-1a', 'eu-central-1b', 'eu-central-1c' ],
+  'availability-zones:account=254857894179:region=us-east-1': [
+    'us-east-1a',
+    'us-east-1b',
+    'us-east-1c',
+    'us-east-1d',
+    'us-east-1e',
+    'us-east-1f'
+  ],
+  applicationName: 'todo-app',
+  region: 'us-east-1',
+  accountId: '254857894179',
+  springProfile: 'aws',
+  environmentName: 'staging',
+  applicationDomain: 'app.hjoly_stratos.dev',
+  hostedZoneDomain: 'hjoly_stratos.dev',
+  dockerImageUrl: 'docker.io/hjolydocker/todo-app-v1:latest',
+  'aws:cdk:enable-path-metadata': true,
+  'aws:cdk:enable-asset-metadata': true,
+  'aws:cdk:version-reporting': true,
+  'aws:cdk:bundling-stacks': [ '**' ]
+}
+[13:27:11] outdir: cdk.out
+[13:27:11] env: {
+  CDK_DEFAULT_REGION: 'us-east-1',
+  CDK_DEFAULT_ACCOUNT: '254857894179',
+  CDK_DEBUG: 'true',
+  CDK_OUTDIR: 'cdk.out',
+  CDK_CLI_ASM_VERSION: '32.0.0',
+  CDK_CLI_VERSION: '2.81.0'
+}
+[13:27:15] Some context information is missing. Fetching...
+[13:27:15] Retrieved account ID 254857894179 from disk cache
+[13:27:15] Reading hosted zone 254857894179:us-east-1:hjoly_stratos.dev
+[13:27:15] Assuming role 'arn:aws:iam::254857894179:role/cdk-hnb659fds-lookup-role-254857894179-us-east-1'.
+[13:27:17] Found the following zones []
+[13:27:17] Found the following matched name zones []
+[13:27:17] Setting "hosted-zone:account=254857894179:domainName=hjoly_stratos.dev:region=us-east-1" context to {"$providerError":"Found zones: [] for dns:hjoly_stratos.dev, privateZone:undefined, vpcId:undefined, but wanted exactly 1 zone","$dontSaveContext":true}
+[13:27:17] Setting "CDK_DEFAULT_REGION" environment variable to us-east-1
+[13:27:17] Setting "CDK_DEFAULT_ACCOUNT" environment variable to 254857894179
+[13:27:17] context: {
+  'availability-zones:account=494365134671:region=ap-southeast-2': [ 'ap-southeast-2a', 'ap-southeast-2b', 'ap-southeast-2c' ],
+  'availability-zones:account=221875718260:region=eu-central-1': [ 'eu-central-1a', 'eu-central-1b', 'eu-central-1c' ],
+  'availability-zones:account=254857894179:region=us-east-1': [
+    'us-east-1a',
+    'us-east-1b',
+    'us-east-1c',
+    'us-east-1d',
+    'us-east-1e',
+    'us-east-1f'
+  ],
+  'hosted-zone:account=254857894179:domainName=hjoly_stratos.dev:region=us-east-1': {
+    '$providerError': 'Found zones: [] for dns:hjoly_stratos.dev, privateZone:undefined, vpcId:undefined, but wanted exactly 1 zone',
+    '$dontSaveContext': true
+  },
+  applicationName: 'todo-app',
+  region: 'us-east-1',
+  accountId: '254857894179',
+  springProfile: 'aws',
+  environmentName: 'staging',
+  applicationDomain: 'app.hjoly_stratos.dev',
+  hostedZoneDomain: 'hjoly_stratos.dev',
+  dockerImageUrl: 'docker.io/hjolydocker/todo-app-v1:latest',
+  'aws:cdk:enable-path-metadata': true,
+  'aws:cdk:enable-asset-metadata': true,
+  'aws:cdk:version-reporting': true,
+  'aws:cdk:bundling-stacks': [ '**' ]
+}
+[13:27:17] outdir: cdk.out
+[13:27:17] env: {
+  CDK_DEFAULT_REGION: 'us-east-1',
+  CDK_DEFAULT_ACCOUNT: '254857894179',
+  CDK_DEBUG: 'true',
+  CDK_OUTDIR: 'cdk.out',
+  CDK_CLI_ASM_VERSION: '32.0.0',
+  CDK_CLI_VERSION: '2.81.0'
+}
+[13:27:20] Not making progress trying to resolve environmental context. Giving up.
+[Error at /certificate] Found zones: [] for dns:hjoly_stratos.dev, privateZone:undefined, vpcId:undefined, but wanted exactly 1 zone
+  Annotations.addMessage (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-kernel-7DgM1f/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1213)
+  Annotations.addError (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-kernel-7DgM1f/node_modules/aws-cdk-lib/core/lib/annotations.js:1:765)
+  ContextProvider.getValue (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-kernel-7DgM1f/node_modules/aws-cdk-lib/core/lib/context-provider.js:2:1160)
+  HostedZone.fromLookup (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-kernel-7DgM1f/node_modules/aws-cdk-lib/aws-route53/lib/hosted-zone.js:1:2894)
+  /private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-java-runtime15701535151250441836/lib/program.js:9790:85
+  Kernel._ensureSync (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-java-runtime15701535151250441836/lib/program.js:10358:28)
+  Kernel.sinvoke (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-java-runtime15701535151250441836/lib/program.js:9790:34)
+  KernelHost.processRequest (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-java-runtime15701535151250441836/lib/program.js:11544:36)
+  KernelHost.run (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-java-runtime15701535151250441836/lib/program.js:11504:22)
+  Immediate._onImmediate (/private/var/folders/3g/k2dmw95147s838q9tv7t8mdr0000gp/T/jsii-java-runtime15701535151250441836/lib/program.js:11505:46)
+  process.processImmediate (node:internal/timers:476:21)
+[13:27:20] Reading cached notices from /Users/utilisationnormale/.cdk/cache/notices.json
+
+NOTICES         (What's this? https://github.com/aws/aws-cdk/wiki/CLI-Notices)
+
+25714	(cli) cdk deploy fails when stacks or stages share assets
+
+	Overview: A single asset used in two stacks or stages that depend on
+	          each other causes 'cdk deploy' to exit early.
+
+	Affected versions: cli: >=2.80.0 <2.83.1
+
+	More information at: https://github.com/aws/aws-cdk/issues/25714
+
+
+If you don’t want to see a notice anymore, use "cdk acknowledge <id>". For example, "cdk acknowledge 25714".
+Found errors
+[13:27:20] Error: Found errors
+    at StackCollection.processMetadataMessages (/opt/homebrew/lib/node_modules/aws-cdk/lib/api/cxapp/cloud-assembly.ts:270:13)
+    at CdkToolkit.validateStacks (/opt/homebrew/lib/node_modules/aws-cdk/lib/cdk-toolkit.ts:746:12)
+    at CdkToolkit.selectStacksForDeploy (/opt/homebrew/lib/node_modules/aws-cdk/lib/cdk-toolkit.ts:706:10)
+    at CdkToolkit.deploy (/opt/homebrew/lib/node_modules/aws-cdk/lib/cdk-toolkit.ts:163:29)
+    at exec4 (/opt/homebrew/lib/node_modules/aws-cdk/lib/cli.ts:404:12)
+

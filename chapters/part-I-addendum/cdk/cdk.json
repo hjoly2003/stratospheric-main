@@ -5,6 +5,12 @@
     "accountId": "254857894179",
     "springProfile": "aws",
     "environmentName": "staging",
+
+    "applicationDomain": "app.hjoly_stratos.dev",
+    
+
+    "hostedZoneDomain": "hjoly_stratos.dev",
+
     "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
   }
 }
