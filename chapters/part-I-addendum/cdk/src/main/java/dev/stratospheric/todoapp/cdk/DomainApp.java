@@ -5,7 +5,7 @@ import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 
 /**
- * [N]:part-I-addendum]:a_record - Creates a DNS "A record" for associating the "app.hjoly_stratos.dev" Custom Domain for the ELB. This is for enabling users to access the to-do application via that custom domain. This CDK app works for any domain as long as it is managed by Route53.
+ * [N]:part-I-addendum]:a_record - Creates a DNS "A record" for associating the "app.hjolystratos.net" Custom Domain for the ELB. This is for enabling users to access the to-do application via that custom domain. This CDK app works for any domain as long as it is managed by Route53.
  */
 public class DomainApp {
 
@@ -24,11 +24,9 @@ public class DomainApp {
     String region = (String) app.getNode().tryGetContext("region");
     Validations.requireNonEmpty(region, "context variable 'region' must not be null");
 
-    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.hjoly_stratos.dev
     String hostedZoneDomain = (String) app.getNode().tryGetContext("hostedZoneDomain");
     Validations.requireNonEmpty(hostedZoneDomain, "context variable 'hostedZoneDomain' must not be null");
 
-    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.hjoly_stratos.dev
     String applicationDomain = (String) app.getNode().tryGetContext("applicationDomain");
     Validations.requireNonEmpty(applicationDomain, "context variable 'applicationDomain' must not be null");
 

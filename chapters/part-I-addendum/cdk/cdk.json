@@ -6,10 +6,14 @@
     "springProfile": "aws",
     "environmentName": "staging",
 
-    "applicationDomain": "app.hjoly_stratos.dev",
+    "comment1": "[N]:part-I-addendum]:domain",
+    "applicationDomain": "app.hjolystratos.net",
     
+    "comment2": "[N]:part-I-addendum]:cert",
+    "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/5d0a13af-173f-49eb-8f78-3bf810dd2d8f",
 
-    "hostedZoneDomain": "hjoly_stratos.dev",
+    "comment3": "[N]:part-I-addendum]:a_record",
+    "hostedZoneDomain": "hjolystratos.net",
 
     "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
   }
