@@ -20,6 +20,15 @@ Check the parameters inside the cdk.json (most importantly, set the account ID t
 
 ]:domain - First, in the AWS console, we need to register a new domain with Route53. Once registered, go to the "Hosted zones" of Route53 and you should see hosted zone named according to your domain.
 
+To create a Docker image compatible to the default AWS ECS architecture (see [How to build docker image for multiple platforms with cross-compile?](https://stackoverflow.com/questions/73978929/how-to-build-docker-image-for-multiple-platforms-with-cross-compile)):
+
+```bash
+cd part-I-addendum/application
+gradle build
+# The following requires Docker to be running: it builds the image in x86_64 and push it to DockerHub
+docker buildx build --platform=linux/amd64 -t hjolydocker/todo-app-v1:latest --push .
+```
+
 To get the ARN of the SSL certificate:
 
 ```bash
@@ -65,5 +74,3 @@ npm run certificate:destroy
 3. Within the S3 Management Console, select that same bucket and click the "Empty" button.
 4. For that bucket click the "Delete" button.
 5. Back in the CDKToolkit stack within the CloudFormation window, click the "Delete" button.
-
-[N]: part-I-addendum]:cert
