@@ -10,11 +10,12 @@
     "applicationDomain": "app.hjolystratos.net",
     
     "comment2": "[N]:part-I-addendum]:cert",
-    "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/5d0a13af-173f-49eb-8f78-3bf810dd2d8f",
+    "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a",
 
     "comment3": "[N]:part-I-addendum]:a_record",
     "hostedZoneDomain": "hjolystratos.net",
-
+    
+    "comment4": "[N]: Specifies the source of the Docker image that we want to deploy.",
     "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
   }
 }

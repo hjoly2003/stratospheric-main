@@ -5,6 +5,8 @@
     "accountId": "254857894179",
     "springProfile": "aws",
     "environmentName": "staging",
+
+    "comment": "[N]: Specifies the source of the Docker image that we want to deploy.",
     "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
   }
 }

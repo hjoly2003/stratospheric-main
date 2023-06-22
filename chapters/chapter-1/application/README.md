@@ -31,14 +31,13 @@ This app is published as a Docker image at https://hub.docker.com/repository/doc
 
 ## Publishing the app to Docker Hub
 
+Since we're building the application on an arm64 platform, we need to create a Docker image compatible to the default AWS ECS architecture (see [How to build docker image for multiple platforms with cross-compile?](https://stackoverflow.com/questions/73978929/how-to-build-docker-image-for-multiple-platforms-with-cross-compile)):
+
 ```bash
-cd ./application
+cd chapter-1/application
 gradle build
-docker build -t hjolydocker/todo-app-v1:latest .
-docker image ls
-docker login
-docker push hjolydocker/todo-app-v1:latest
-docker pull stratospheric/todo-app-v1:latest
+# The following requires Docker to be running: it builds the image in x86_64 and push it to DockerHub
+docker buildx build --platform=linux/amd64 -t hjolydocker/todo-app-v1:latest --push .
 ```
 
 ## Deploying the app to AWS

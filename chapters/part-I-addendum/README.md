@@ -20,7 +20,7 @@ Check the parameters inside the cdk.json (most importantly, set the account ID t
 
 ]:domain - First, in the AWS console, we need to register a new domain with Route53. Once registered, go to the "Hosted zones" of Route53 and you should see hosted zone named according to your domain.
 
-To create a Docker image compatible to the default AWS ECS architecture (see [How to build docker image for multiple platforms with cross-compile?](https://stackoverflow.com/questions/73978929/how-to-build-docker-image-for-multiple-platforms-with-cross-compile)):
+Since we're building the application on an arm64 platform, we need to create a Docker image compatible to the default AWS ECS architecture (see [How to build docker image for multiple platforms with cross-compile?](https://stackoverflow.com/questions/73978929/how-to-build-docker-image-for-multiple-platforms-with-cross-compile)):
 
 ```bash
 cd part-I-addendum/application
@@ -50,7 +50,6 @@ Lets copy that ARN into the `./cdk/cdk.json`'s `sslCertificateArn` property.
 What’s left to do is to trigger a redeployment of our network and service apps:
 
 ```bash
-npm run repository:deploy # [!] err: Already deployed. => First need to delete todo-app repository in ECR
 npm run network:deploy 
 npm run service:deploy # takes a while
 npm run domain:deploy # creates an A-record for our subdomain via Route53 (takes a while)
@@ -65,11 +64,12 @@ Don't forget to delete the stacks afterward:
 npm run domain:destroy
 npm run service:destroy
 npm run network:destroy
-npm run repository:destroy # Complete the job in AWS Console ECR & delete the repositories
 npm run certificate:destroy
 ```
 
-1. To delete the CDKToolkit stack, open its "Resources" tab from the CloudFormation.
+To delete the CDKToolkit stack:
+
+1. open its "Resources" tab from the CloudFormation.
 2. Within the resource tab, copy the "Physical ID" of the AWS::S3::Bucket.
 3. Within the S3 Management Console, select that same bucket and click the "Empty" button.
 4. For that bucket click the "Delete" button.

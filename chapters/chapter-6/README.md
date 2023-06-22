@@ -19,13 +19,24 @@ The image above shows what we want to achieve. Each box is a CloudFormation reso
 
 ```bash
 npm install # to install the dependencies
+cdk bootstrap aws://<ACCOUNT_ID>/<REGION> # to bootstrap our AWS environment
 ```
 
 Check the parameters inside the cdk.json (most importantly, set the account ID to your AWS account ID).
 
+Since we're building the application on an arm64 platform, we need to create a Docker image compatible to the default AWS ECS architecture (see [How to build docker image for multiple platforms with cross-compile?](https://stackoverflow.com/questions/73978929/how-to-build-docker-image-for-multiple-platforms-with-cross-compile)):
+
+```bash
+cd chapter-6/application
+gradle build
+# The following requires Docker to be running: it builds the image in x86_64 and push it to DockerHub
+docker buildx build --platform=linux/amd64 -t hjolydocker/todo-app-v1:latest --push .
+```
+
+What’s left to do is to trigger a redeployment of our network and service apps:
+
 ```bash
 cd chapter-6/cdk
-npm run repository:deploy 
 npm run network:deploy 
 npm run service:deploy
 ```
@@ -38,5 +49,11 @@ Don't forget to delete the stacks afterward:
 ```bash
 npm run service:destroy
 npm run network:destroy
-npm run repository:destroy
 ```
+
+To delete the CDKToolkit stack:
+1. open its "Resources" tab from the CloudFormation.
+2. Within the resource tab, copy the "Physical ID" of the AWS::S3::Bucket.
+3. Within the S3 Management Console, select that same bucket and click the "Empty" button.
+4. For that bucket click the "Delete" button.
+5. Back in the CDKToolkit stack within the CloudFormation window, click the "Delete" button.
