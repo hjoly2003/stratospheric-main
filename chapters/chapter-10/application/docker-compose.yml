@@ -1,6 +1,20 @@
 version: '3.3'
 
 services:
+
+  # [N]:local]:localstack - LocalStack for running AWS services emulations locally
+  localstack:
+    image: localstack/localstack:0.14.4
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=sqs,ses,dynamodb
+      - DEFAULT_REGION=us-east-1
+      - USE_SINGLE_REGION=true
+    volumes:
+      - ./src/test/resources/localstack/local-aws-infrastructure.sh:/docker-entrypoint-initaws.d/init.sh
+  
+  # [N]:local]:keycloak - For emulating AWS Cognito locally. [!] The latest version of LocalStack supports Cognito.
   keycloak:
     image: quay.io/keycloak/keycloak:18.0.0-legacy
     ports:

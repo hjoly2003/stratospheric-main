@@ -1,3 +1,4 @@
+# [N] For running the application on AWS in production mode.
 spring:
   security:
     oauth2:
@@ -7,6 +8,7 @@ spring:
             clientId: ${COGNITO_CLIENT_ID}
             clientSecret: ${COGNITO_CLIENT_SECRET}
             scope: openid, profile, email
+            # [?] stratospheric-users-client
             clientName: stratospheric-client
         provider:
           cognito:

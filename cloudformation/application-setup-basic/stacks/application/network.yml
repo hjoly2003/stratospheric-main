@@ -129,7 +129,8 @@ Resources:
   BaseCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: '*.stratospheric.dev'
+      # [?]
+      DomainName: '*.hjolystratos.net'
       ValidationMethod: 'DNS'
 
   ECSCluster:

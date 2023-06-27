@@ -1,4 +1,6 @@
+# [N]:local - For local development, connecting to local Docker containers, and overriding the AWS clients to point to localhost.
 spring:
+  # [N]:local]:postgres - For emulating AWS RDS (Relational Database Service). [!] The latest version of LocalStack supports RDS.  
   datasource:
     url: jdbc:postgresql://localhost:5432/stratospheric
     username: stratospheric
@@ -26,12 +28,13 @@ spring:
     show-sql: true
   cloud:
     aws:
+      # [N]:local - We have to override our Java AWS SDK clients to connect to LocalStack. With Spring Cloud AWS, we can conveniently override the endpoint URLs and regions for all AWS SDK clients. When it comes to configuring the AWS credentials for the local setup, LocalStack bypasses any AWS client authentication hence, we hardcode the AWS credentials with any value.
       credentials:
         secret-key: foo
         access-key: bar
       endpoint: http://localhost:4566
       region:
-        static: eu-central-1
+        static: us-east-1
 
 management:
   metrics:
