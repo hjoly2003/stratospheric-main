@@ -1,5 +1,5 @@
 plugins {
-  id 'org.springframework.boot' version '3.1.0'
+  id 'org.springframework.boot' version '3.1.1'
   id 'io.spring.dependency-management' version '1.1.0'
   id 'com.gorylenko.gradle-git-properties' version '2.4.1'
   id 'java'
@@ -26,13 +26,20 @@ ext {
 }
 
 dependencies {
+  // [N]:security
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+  // [N] Spring Boot Starter Thymeleaf: This starter includes all relevant Thymeleaf dependencies and auto-configures the ViewResolver to render Thymeleaf templates.
   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
   implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+  // [N] Spring Boot Starter Web: The core of our application. It includes and autoconfigures Tomcat as an embedded Servlet container.
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+  // [N] Spring Boot Starter Validation: Used to validate incoming payloads using Bean Validation.
   implementation 'org.springframework.boot:spring-boot-starter-validation'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'io.awspring.cloud:spring-cloud-aws-starter-ses'
@@ -52,7 +59,10 @@ dependencies {
   implementation 'org.webjars:font-awesome:6.4.0'
   
   implementation 'org.flywaydb:flyway-core'
+
+  // [N]:cognito - For communicating with Cognito
   implementation 'software.amazon.awssdk:cognitoidentityprovider'
+
   implementation "com.google.code.findbugs:jsr305:${jsr305Version}"
   implementation "de.siegmar:logback-awslogs-json-encoder:${logbackAwslogsJsonEncoderVersion}"
   implementation "io.github.wimdeblauwe:error-handling-spring-boot-starter:${errorHandlingSpringBootStarterVersion}"
@@ -76,7 +86,9 @@ dependencies {
 
 dependencyManagement {
   imports {
+    // [N] The Spring Cloud AWS BOM ensures that all (upcoming) dependencies that are part of the Spring Cloud AWS umbrella share the same version.
     mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:${awsSpringVersion}"
+
     mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
   }
 }

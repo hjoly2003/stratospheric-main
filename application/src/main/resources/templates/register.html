@@ -8,6 +8,7 @@
   <title>Register</title>
 </head>
 <section class="section" layout:fragment="page-content">
+  <!-- [N]:usr-signup - A public Thymeleaf view that contains the relevant information for new sign-ups. It adds a layer of protection and require an invitation code on each signup. -->
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <form th:action="@{/register}" th:object="${registration}" method="post">

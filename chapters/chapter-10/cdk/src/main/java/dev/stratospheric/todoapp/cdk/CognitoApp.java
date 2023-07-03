@@ -6,7 +6,13 @@ import software.amazon.awscdk.Environment;
 
 import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
 
+/**
+ * [N]:cognito - Used for the deployment of an AWS Cognito service.
+ * @param applicationUrl This parameter allows us to pass the final base URL of our application. An example URL would be https://app.hjolystratos.net.
+ * @param loginPageDomainPrefix Each user pool provides a customizable web UI for users to log in. We can either provide a custom domain or pass a prefix to use an Amazon Cognito domain that will look something like this: https://{prefix}.auth.{region}.amazoncognito.com.
+ */
 public class CognitoApp {
+
   public static void main(final String[] args) {
     App app = new App();
 

@@ -8,6 +8,9 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminCreate
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AttributeType;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.DeliveryMediumType;
 
+/**
+ * [N]:usr-signup]:cognito - Performs the actual user registration to the RegistrationService.<p/>
+ */
 @Service
 @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "true")
 public class CognitoRegistrationService implements RegistrationService {
@@ -36,7 +39,6 @@ public class CognitoRegistrationService implements RegistrationService {
       .forceAliasCreation(Boolean.FALSE)
       .build();
 
-    cognitoIdentityProviderClient.adminCreateUser(registrationRequest);
     cognitoIdentityProviderClient.adminCreateUser(registrationRequest);
   }
 }

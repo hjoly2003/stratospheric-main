@@ -3,6 +3,9 @@ package dev.stratospheric.todoapp.registration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+/**
+ * [N]:usr-signup]:local - Performs the actual user registration to the RegistrationService.<p/>
+ */
 @Service
 @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "false")
 public class LocalRegistrationService implements RegistrationService {

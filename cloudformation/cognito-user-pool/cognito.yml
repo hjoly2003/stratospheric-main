@@ -9,7 +9,7 @@ Parameters:
     Description: The external URL of the application
 
 Resources:
-  # Creates a UserPool in Cognito for an app to authenticate against.
+  # [N] Creates a UserPool in Cognito for an app to authenticate against. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html)
   UserPool:
     Type: "AWS::Cognito::UserPool"
     Properties:
@@ -36,6 +36,8 @@ Resources:
           AttributeDataType: String
           Mutable: false
           Required: true
+  
+  # [N] see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html.
   UserPoolClient:
     Type: "AWS::Cognito::UserPoolClient"
     Properties:

@@ -8,9 +8,19 @@ import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInit
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+/**
+ * [N]:logout - For logging out the end user at the identity provider.
+ */
 @Configuration
 public class LogoutSuccessHandlerConfig {
 
+  /**
+   * Defines the {@link CognitoOidcLogoutSuccessHandler} as a bean for when {@code custom.use-cognito-as-identity-provider} is set to {@code true} and inject the relevant credentials and region to configure the handler<p/>
+   * The ${COGNITO_...} environment variables are specified when deploying our Todo application with ECS (see {@link dev.stratospheric.todoapp.cdk.ServiceApp#environmentVariables}).
+   * @param clientId
+   * @param userPoolLogoutUrl
+   * @return
+   */
   @Bean
   @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "true")
   public LogoutSuccessHandler cognitoOidcLogoutSuccessHandler(

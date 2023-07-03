@@ -3,6 +3,9 @@ package dev.stratospheric.registration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+/**
+ * [N]:usr-signup]:local - Performs no user registration as it's not working locally.<p/>
+ */
 @Service
 @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "false")
 public class LocalRegistrationService implements RegistrationService {

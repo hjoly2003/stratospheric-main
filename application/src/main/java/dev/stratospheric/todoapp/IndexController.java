@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
+/**
+ * [N]:thymeleaf - A public endpoint that exposes a Thymeleaf view.<p>
+ * This Spring MVC {@code @Controller } resolves the index view located inside {@code src/main/resources/templates}.
+ */
 @Controller
 public class IndexController {
 
@@ -17,6 +21,11 @@ public class IndexController {
     this.eventPublisher = eventPublisher;
   }
 
+  /**
+   * After a successful login, the user is redirected to this endpoint and Spring Security creates a Principal in the form of an OidcUser that we inject to the call. 
+   * @param principal
+   * @return
+   */
   @GetMapping
   @RequestMapping("/")
   public String getIndex(Principal principal) {

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+// [N]:cognito
 class LoggingContextInterceptor implements HandlerInterceptor {
 
   private final Logger logger = LoggerFactory.getLogger(LoggingContextInterceptor.class);
@@ -20,6 +21,7 @@ class LoggingContextInterceptor implements HandlerInterceptor {
     final HttpServletResponse response,
     final Object handler) {
 
+    // [N] Once a user logged in, Spring Security creates a Principal in the form of an OidcUser.
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String userId = getUserIdFromPrincipal(authentication.getPrincipal());
     MDC.put("userId", userId);

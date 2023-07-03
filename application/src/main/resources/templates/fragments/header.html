@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- [N]:security - We bind the XML namespace http://www.thymeleaf.org/extras/spring-security to the 'sec' prefix -->
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
@@ -29,6 +30,7 @@
         </li>
       </ul>
       <ul class="navbar-nav">
+        <!-- [N]:security - Spring Security accessible through the 'sec' prefix -->
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a
             class="nav-link"
@@ -43,8 +45,11 @@
           </a>
         </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
+          <!-- [N]:security - We can also access the Spring Security authentication object by referring to the expression utility object #authentication (through a SpEl expression ?). -->
           <a class="nav-link disabled" href="#">Howdy, [[${#authentication.principal.attributes.name}]]!</a>
         </li>
+        
+        <!-- [N]:logout - To log out of the web session. The /logout route is the default location of Spring Security for handling the logout process. -->
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <form th:action="@{/logout}" method="post">
             <input class="btn btn-danger" type="submit" value="Logout">

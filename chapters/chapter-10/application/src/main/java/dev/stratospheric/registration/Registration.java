@@ -3,6 +3,9 @@ package dev.stratospheric.registration;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * [N]:security]:usr-signup - Models the registration of a new user. To avoid bots from auto-generating accounts, this registration process is an extra-layer of protection that requires an invitation code on each signup.
+ */
 public class Registration {
 
   @NotBlank

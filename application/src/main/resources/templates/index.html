@@ -1,7 +1,10 @@
 <!DOCTYPE html>
+<!-- [N]:security - We bind the XML namespace http://www.thymeleaf.org/extras/spring-security to the 'sec' prefix -->
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"  
+      
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}"
       th:with="activeMenuItem='start', headline='Welcome to the Todo Application!'">
@@ -10,6 +13,9 @@
 </head>
 <section class="section" layout:fragment="page-content">
   <div class="container">
+    
+    <!-- [N]:web-filter - I include a button to allow users to log in. We’ll only show this button whenever an unauthenticated visitor loads our application. -->
+    <!-- [N]:security - Spring Security accessible through the 'sec' prefix -->
     <div sec:authorize="isAnonymous()">
       <p>Seems like you are not logged-in yet. Please login first to see your Todos.</p>
       <a class="btn btn-primary" th:href="@{/oauth2/authorization/cognito}">

@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
 
-  # [N]:local]:localstack - LocalStack for running AWS services emulations locally
+  # [N]:local]:localstack - LocalStack for running AWS services emulations locally. Note, the latest version can emulate cognito & postgres.
   localstack:
     image: localstack/localstack:0.14.4
     ports:
@@ -25,4 +25,5 @@ services:
       - DB_VENDOR=h2
       - JAVA_OPTS=-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/stratospheric-realm.json
     volumes:
+      # [N] The stratospheric-realm.json file that we are mapping to inside of the Docker container contains the configuration for Keycloak. To avoid any manual setup steps (define users, configure the realm, etc.), we import this config during Keycloak startup. This config pre-populates three users and registers our Todo application as a known client. 
       - ./src/test/resources/keycloak/stratospheric-realm.json:/tmp/stratospheric-realm.json

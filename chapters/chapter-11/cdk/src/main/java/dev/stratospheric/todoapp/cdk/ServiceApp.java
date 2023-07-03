@@ -77,6 +77,7 @@ public class ServiceApp {
           serviceStack,
           databaseOutputParameters,
           springProfile))
+        // [N]:security - Ensures that users are always routed to the same service instance they were assigned to on their first request. Otherwize, having many instances of the application running in parallel exposes us to the risk of a session validation failure  or user authentication failure as these are node dependent (see "Shortcomings when Scaling Out" from Stratospheric chapter 10).
         .withStickySessionsEnabled(true)
         .withHealthCheckIntervalSeconds(30), // needs to be long enough to allow for slow start up with low-end computing instances
 

@@ -19,6 +19,8 @@ import software.amazon.awscdk.services.secretsmanager.ISecret;
 import software.amazon.awscdk.services.secretsmanager.Secret;
 import software.constructs.Construct;
 
+import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
+
 import static java.util.Collections.singletonList;
 
 public class ServiceApp {
@@ -31,26 +33,26 @@ public class ServiceApp {
 
     // [N] Either "staging" or "production". The environmentName is used to be able to create multiple stacks for different environments from the same CDK app.
     String environmentName = (String) app.getNode().tryGetContext("environmentName");
-    Validations.requireNonEmpty(environmentName, "context variable 'environmentName' must not be null");
+    requireNonEmpty(environmentName, "context variable 'environmentName' must not be null");
 
     String applicationName = (String) app.getNode().tryGetContext("applicationName");
-    Validations.requireNonEmpty(applicationName, "context variable 'applicationName' must not be null");
+    requireNonEmpty(applicationName, "context variable 'applicationName' must not be null");
 
     // [N] AWS account ID asscociated to the IAM user account.
     String accountId = (String) app.getNode().tryGetContext("accountId");
-    Validations.requireNonEmpty(accountId, "context variable 'accountId' must not be null");
+    requireNonEmpty(accountId, "context variable 'accountId' must not be null");
 
     String springProfile = (String) app.getNode().tryGetContext("springProfile");
-    Validations.requireNonEmpty(springProfile, "context variable 'springProfile' must not be null");
+    requireNonEmpty(springProfile, "context variable 'springProfile' must not be null");
 
     String dockerRepositoryName = (String) app.getNode().tryGetContext("dockerRepositoryName");
-    Validations.requireNonEmpty(dockerRepositoryName, "context variable 'dockerRepositoryName' must not be null");
+    requireNonEmpty(dockerRepositoryName, "context variable 'dockerRepositoryName' must not be null");
 
     String dockerImageTag = (String) app.getNode().tryGetContext("dockerImageTag");
-    Validations.requireNonEmpty(dockerImageTag, "context variable 'dockerImageTag' must not be null");
+    requireNonEmpty(dockerImageTag, "context variable 'dockerImageTag' must not be null");
 
     String region = (String) app.getNode().tryGetContext("region");
-    Validations.requireNonEmpty(region, "context variable 'region' must not be null");
+    requireNonEmpty(region, "context variable 'region' must not be null");
 
     Environment awsEnvironment = makeEnv(accountId, region);
 
@@ -108,6 +110,7 @@ public class ServiceApp {
           activeMqOutputParameters,
           springProfile,
           environmentName))
+        // [N]:cognito - The Service construct of our cdk-constructs library now takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
         .withTaskRolePolicyStatements(List.of(
           PolicyStatement.Builder.create()
             .sid("AllowSQSAccess")
@@ -126,6 +129,7 @@ public class ServiceApp {
               "sqs:ChangeMessageVisibility",
               "sqs:GetQueueAttributes"))
             .build(),
+          // [N]:cognito - The following policy allows all operations for cognito-idp (IdP: identity Provider)
           PolicyStatement.Builder.create()
             .sid("AllowCreatingUsers")
             .effect(Effect.ALLOW)
@@ -169,6 +173,7 @@ public class ServiceApp {
             .actions(singletonList("cloudwatch:PutMetricData"))
             .build()
         ))
+        // [N]:security - Ensures that users are always routed to the same service instance they were assigned to on their first request. Otherwize, having many instances of the application running in parallel exposes us to the risk of a session validation failure  or user authentication failure as these are node dependent (see "Shortcomings when Scaling Out" from Stratospheric chapter 10).
         .withStickySessionsEnabled(true)
         .withHealthCheckPath("/actuator/health")
         .withAwsLogsDateTimeFormat("%Y-%m-%dT%H:%M:%S.%f%z")
@@ -203,11 +208,14 @@ public class ServiceApp {
       databaseSecret.secretValueFromJson("username").toString());
     vars.put("SPRING_DATASOURCE_PASSWORD",
       databaseSecret.secretValueFromJson("password").toString());
+
+    // [N]:security]:cognito - Makes Cognito secure parameters available to the application's Spring security initialization. For the sake of simplicity, we're passing them as plain-text parameters instead of encrypted values.
     vars.put("COGNITO_CLIENT_ID", cognitoOutputParameters.getUserPoolClientId());
     vars.put("COGNITO_CLIENT_SECRET", cognitoOutputParameters.getUserPoolClientSecret());
     vars.put("COGNITO_USER_POOL_ID", cognitoOutputParameters.getUserPoolId());
     vars.put("COGNITO_LOGOUT_URL", cognitoOutputParameters.getLogoutUrl());
     vars.put("COGNITO_PROVIDER_URL", cognitoOutputParameters.getProviderUrl());
+
     vars.put("TODO_SHARING_QUEUE_NAME", messagingOutputParameters.getTodoSharingQueueName());
     vars.put("WEB_SOCKET_RELAY_ENDPOINT", activeMqOutputParameters.getStompEndpoint());
     vars.put("WEB_SOCKET_RELAY_USERNAME", activeMqOutputParameters.getActiveMqUsername());

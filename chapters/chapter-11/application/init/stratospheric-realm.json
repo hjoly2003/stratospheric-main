@@ -647,6 +647,7 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
+    "comment": "[?]:keycloak - Do I have to generate it for my local instance?",
     "secret" : "27b07baf-53ba-42c6-b11f-6384769cada3",
     "redirectUris" : [ "http://localhost:8080/*" ],
     "webOrigins" : [ "http://localhost:8080" ],

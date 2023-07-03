@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
 
+/**
+ * [N]:security]:usr-signup - A basic Spring MVC controller for exposing the user registration view.
+ */
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
@@ -30,6 +33,8 @@ public class RegistrationController {
   public String registerUser(@Valid Registration registration,
                              BindingResult bindingResult,
                              Model model, RedirectAttributes redirectAttributes) {
+    
+    // Ensures that our model matches our validation rules: no empty email or username (as definded through the @NotEmpty annotation in the Person model).
     if (bindingResult.hasErrors()) {
       model.addAttribute("registration", registration);
       return "register";

@@ -4,6 +4,7 @@ spring:
     oauth2:
       client:
         registration:
+          # [N]:security]:cognito - Specifies the OpenID Discovery endpoint of Cognito, our identity provider. The ${} placeholders will be replaced with environment variables that we specify when deploying our Todo application with ECS (see dev.stratospheric.todoapp.cdk.ServiceApp.environmentVariables). The ${} is a typical usage of SpEL - Spring’s powerful expression language (see https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwi2jayZ5e3_AhW3kIkEHXE-B2wQFnoECA4QAQ&url=https%3A%2F%2Fwww.baeldung.com%2Fspring-expression-language&usg=AOvVaw3D9u2acVyGWEIEkSYtWAmG&opi=89978449)).
           cognito:
             clientId: ${COGNITO_CLIENT_ID}
             clientSecret: ${COGNITO_CLIENT_SECRET}

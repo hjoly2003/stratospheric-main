@@ -8,6 +8,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * [N]:usr_signup - Annotation attached to {@link Registration#invitationCode}.<p/>
+ * Plugs together the {@code @ValidInvitationCode} annotation with the {@code InvitationCodeValidator}.
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = InvitationCodeValidator.class)
