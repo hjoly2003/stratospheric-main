@@ -46,9 +46,9 @@ Build and deploy the application
 
 ```bash
 cd stratospheric-main/application
-./gradlew build
+gradle build
 docker-compose up
-./gradlew bootRun
+gradle bootRun
 ```
 
 Open your browser to `http://localhost:8080/`.

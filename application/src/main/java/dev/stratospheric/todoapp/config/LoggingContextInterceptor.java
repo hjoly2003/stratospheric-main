@@ -10,7 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-// [N]:cognito
+/**
+ *  [N]:cognito
+ */
 class LoggingContextInterceptor implements HandlerInterceptor {
 
   private final Logger logger = LoggerFactory.getLogger(LoggingContextInterceptor.class);
