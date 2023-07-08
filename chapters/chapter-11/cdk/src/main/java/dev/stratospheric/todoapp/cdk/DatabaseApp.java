@@ -9,6 +9,9 @@ import software.amazon.awscdk.StackProps;
 
 import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
 
+/**
+ * [N]:rds - Deploys our PostgresDatabase construct.
+ */
 public class DatabaseApp {
 
   public static void main(final String[] args) {
@@ -38,11 +41,13 @@ public class DatabaseApp {
       .env(awsEnvironment)
       .build());
 
+    // [N] Adds the PostgresDatabase construct to the Stack called "databaseStack" 
     new PostgresDatabase(
       databaseStack,
       "Database",
       awsEnvironment,
       applicationEnvironment,
+      // [N] If we wanted to make any of the parameters in DatabaseInputParameters configurable, we could pass them into the app and then into the DatabaseInputParameters from there.
       new PostgresDatabase.DatabaseInputParameters());
 
     app.synth();

@@ -14,6 +14,12 @@ public class TodoService {
   private final PersonRepository personRepository;
   private final MeterRegistry meterRegistry;
 
+  /**
+   * 
+   * @param todoRepository [N]:spring]:jpa - Automatically injected by Spring into this constructor.
+   * @param personRepository
+   * @param meterRegistry
+   */
   public TodoService(
     TodoRepository todoRepository,
     PersonRepository personRepository,

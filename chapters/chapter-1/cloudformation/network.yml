@@ -10,7 +10,7 @@ Resources:
       # [N] defines the range of IP addresses available to any resources within the VPC that need an IP address. The value 10.0.0.0/16 means that we’re creating a network with an IP address range from 10.0.0.0 through 10.0.255.255 (the 16 leading bits 10.0 are fixed, the rest is free to use).
       CidrBlock: '10.0.0.0/16'
 
-  # [N] A public subnet in one of the availability zones of the region we’re deploying into. We make this subnet public by setting MapPublicIpOnLaunch to true and attaching it to an internet gateway.
+  # [N] A public subnet in one of the availability zones of the region we’re deploying into. We make this subnet public by setting MapPublicIpOnLaunch to true and attaching it to an internet gateway. (See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html)
   PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
@@ -25,31 +25,31 @@ Resources:
       CidrBlock: '10.0.1.0/24'
       MapPublicIpOnLaunch: true
 
-  # [N] An internet gateway to allow inbound traffic from the internet to resources in our public subnet and outbound traffic from the subnet to the internet.
+  # [N] An internet gateway to allow inbound traffic from the internet to resources in our public subnet and outbound traffic from the subnet to the internet. (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html)
   InternetGateway:
     Type: AWS::EC2::InternetGateway
 
-  # [N] This resource of type VpcGatewayAttachment attaches our subnet to the internet gateway, making it effectively public.
+  # [N] This resource of type VpcGatewayAttachment attaches our subnet to the internet gateway, making it effectively public. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html)
   GatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref 'VPC'
       InternetGatewayId: !Ref 'InternetGateway'
 
-  # [N] A RouteTable to define routes between the internet gateway and the public subnet.
+  # [N] A RouteTable to define routes between the internet gateway and the public subnet. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-routetable.html)
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref 'VPC'
 
-  # [N] Some boilerplate to link the route table with our public subnet.
+  # [N] Some boilerplate to link the route table with our public subnet. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnetroutetableassociation.html)
   PublicSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref PublicSubnet
       RouteTableId: !Ref PublicRouteTable
 
-  # [N] The actual route telling AWS that we want to allow traffic from our internet gateway to any IP address within our public subnet.
+  # [N] The actual route telling AWS that we want to allow traffic from our internet gateway to any IP address within our public subnet. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html)
   PublicRoute:
     Type: AWS::EC2::Route
     DependsOn: GatewayAttachment
@@ -62,14 +62,14 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
 
-  # [N] A security group that we can later use to allow traffic to the ECS tasks (i.e. to our Docker container). We’ll refer to this security group later in the service stack (service.yml)
+  # [N] A security group that we can later use to allow traffic to the ECS tasks (i.e. to our Docker container). We’ll refer to this security group later in the service stack (service.yml) (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
   ECSSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Access to the ECS containers
       VpcId: !Ref 'VPC'
 
-  # [N] A security group rule that allows traffic from anywhere to any resources attached to our ECSSecurityGroup.
+  # [N] A security group rule that allows traffic from anywhere to any resources attached to our ECSSecurityGroup. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-ingress.html)
   ECSSecurityGroupIngressFromAnywhere:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -78,7 +78,7 @@ Resources:
       IpProtocol: -1
       CidrIp: 0.0.0.0/0
 
-  # [N] A role that attaches some permissions to the ecs-service principal. We’re giving the ECS service some permissions to modify networking stuff for us.
+  # [N] A role that attaches some permissions to the ecs-service principal. We’re giving the ECS service some permissions to modify networking stuff for us. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)
   ECSRole:
     Type: AWS::IAM::Role
     Properties:
@@ -106,7 +106,7 @@ Resources:
                   - 'ec2:DetachNetworkInterface'
                 Resource: '*'
 
-  # [N] A role that attaches some permissions to the ecstasks principal. This role will give our ECS tasks permissions to write log events, for example.
+  # [N] A role that attaches some permissions to the ecstasks principal. This role will give our ECS tasks permissions to write log events, for example. (see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)
   ECSTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:

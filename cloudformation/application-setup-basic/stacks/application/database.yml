@@ -16,17 +16,21 @@ Parameters:
     Description: The master user name for the PostgreSQL instance.
 
 Resources:
+  # [N]:rds]:security - A database secret used as a password for the database.
   Secret:
     Type: "AWS::SecretsManager::Secret"
     Properties:
       Name: !Ref 'DBUsername'
       GenerateSecretString:
-        # This will generate a JSON object with the keys "username" and "password".
+        # This will generate a JSON object with the keys "username" and "password". The resulting JSON structure will contain a "username" & a "password".
         SecretStringTemplate: !Join ['', ['{"username": "', !Ref 'DBUsername' ,'"}']]
+        # [N]:rds]:security - The "password" argument defines that the generated password be added to the resulting JSON structure in the password field.
         GenerateStringKey: "password"
         PasswordLength: 32
+        # [N] We’re excluding some characters from the password creation because they are not allowed in PostgreSQL RDS instances.
         ExcludeCharacters: '"@/\'
 
+  # [N]:rds]:security - A database subnet group which combines a set of subnets into a group to be used by database instance.
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
@@ -38,6 +42,7 @@ Resources:
         - Fn::ImportValue:
             !Join [':', [!Ref 'NetworkStackName', 'PrivateSubnetTwo']]
 
+  # [N] We pass the previously created subnetGroup, databaseSecurityGroup, and databaseSecret into the DB instance configuration.
   PostgresInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -48,13 +53,19 @@ Resources:
           - Fn::GetAZs: {Ref: 'AWS::Region'}
       DBInstanceClass: !Ref 'DBInstanceClass'
       DBName: !Ref 'DBName'
+      
+      # [N] The subnet group
       DBSubnetGroupName: !Ref 'DBSubnetGroup'
       Engine: postgres
       EngineVersion: 12.9
+
+      # [N] The database secret. This associates the secret with the database, so we can take advantage of the secret rotation feature137 provided by the AWS Secrets Manager.
       MasterUsername: !Ref 'DBUsername'
       MasterUserPassword: !Join ['', ['{{resolve:secretsmanager:', !Ref Secret, ':SecretString:password}}' ]]
       PubliclyAccessible: false
-      VPCSecurityGroups:
+      
+      VPCSecurityGroups: 
+        # [N] A database security group into which to put the database
         - Fn::ImportValue:
             !Join [':', [!Ref 'NetworkStackName', 'DBSecurityGroupId']]
 
@@ -65,6 +76,7 @@ Resources:
       TargetId: !Ref PostgresInstance
       TargetType: AWS::RDS::DBInstance
 
+# [N] Finally, the PostgresDatabase construct exports some resources from the database stack, so we can use them from other stacks like our service stack. We’ll need the endpointAddress, endpointPort, databaseName, securityGroupId, and secret parameters in the service stack to connect our Spring Boot application to the database.
 Outputs:
   EndpointAddress:
     Description: Address of the RDS endpoint.
@@ -81,6 +93,8 @@ Outputs:
     Value: !Ref DBName
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'DBName' ] ]
+
+  # [N] We keep the database username and password in a Secret, rather than as plaintext values. We only store the Secret’s ARN in the parameter store. Therefore, no sensitive information is shared through the parameter store.
   Secret:
     Description: Reference to the secret containing the password to the database.
     Value: !Ref 'Secret'

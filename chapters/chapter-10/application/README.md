@@ -23,8 +23,6 @@ locally.
 
 ### (in later chapters?)
 
-]:local]:postgres  - For emulating AWS RDS, we’ll be using a PostgreSQL database to store the todos and provide CRUD functionality.
-
 ]:ses]:sqs - The sample application allows users to share their todos with others through email notifications sent via Amazon Simple Email Service (SES) and Amazon Simple Queue Service (SQS).
 
 ]:mq - The sample application uses WebSockets and a managed Apache ActiveMQ message broker running on Amazon MQ to notify a todo owner right in the browser once a collaboration request for a todo has been accepted.
@@ -40,12 +38,7 @@ that we may use as an alternative to the CDK apps.
 
 The application follows a package-by-feature structure. Hence, the feature folders contain the code artifacts related to these respective features. These code artifacts encompass controllers, service interfaces (and their implementations), Spring Data JPA repositories, and data model classes.
 
-#### Storage (in later chapters?)
-
-]:jpa - The application uses Spring Data JPA to store data in a PostgreSQL database. We use Flyway for setting up and subsequently migrating the application database to the state required by the current application source code.
-]:flyway - The resources folder contains a sub-directory named `db/migration/postgresql` with the Flyway migration SQL scripts for setting up the application database.
-
-## Running the app
+#### Running the app
 
 ### Chapter 9
 

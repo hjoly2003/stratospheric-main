@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * [N] For creating, retrieving, updating, and deleting Todos in various controller methods. 
+ */
 @Controller
 @RequestMapping("/todo")
 public class TodoController {
@@ -23,11 +26,22 @@ public class TodoController {
 
   private final TodoService todoService;
 
+  /**
+   * 
+   * @param todoService [N]:spring - Automatically injected by Spring via constructor injection.
+   */
   public TodoController(
     TodoService todoService) {
     this.todoService = todoService;
   }
 
+  /**
+   * 
+   * @param user
+   * @param id
+   * @param model [N]:spring]:mvc - The model holds data to be used in a view (see {@link https://www.baeldung.com/spring-mvc-model-model-map-model-view})
+   * @return
+   */
   @GetMapping("/show/{id}")
   public String showView(
     @AuthenticationPrincipal OidcUser user,

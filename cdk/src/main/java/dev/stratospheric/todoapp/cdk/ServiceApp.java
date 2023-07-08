@@ -77,6 +77,7 @@ public class ServiceApp {
       .env(awsEnvironment)
       .build());
 
+    // [N]:jpa - We load the database output parameters (SPRING_DATASOURCE_{URL|USERNAME|PASSWORD}) to make them available to Spring Boot. 
     PostgresDatabase.DatabaseOutputParameters databaseOutputParameters =
       PostgresDatabase.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
@@ -110,7 +111,7 @@ public class ServiceApp {
           activeMqOutputParameters,
           springProfile,
           environmentName))
-        // [N]:cognito - The Service construct of our cdk-constructs library now takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
+        // [N]:security - The Service construct of our cdk-constructs library now takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
         .withTaskRolePolicyStatements(List.of(
           PolicyStatement.Builder.create()
             .sid("AllowSQSAccess")
@@ -184,6 +185,16 @@ public class ServiceApp {
     app.synth();
   }
 
+  /**
+   * @param scope
+   * @param databaseOutputParameters
+   * @param cognitoOutputParameters
+   * @param messagingOutputParameters
+   * @param activeMqOutputParameters
+   * @param springProfile
+   * @param environmentName
+   * @return [N]:jpa A map of all environment variables that should be injected into the Docker container of our Spring Boot app.
+   */
   static Map<String, String> environmentVariables(
     Construct scope,
     PostgresDatabase.DatabaseOutputParameters databaseOutputParameters,
@@ -199,11 +210,15 @@ public class ServiceApp {
     ISecret databaseSecret = Secret.fromSecretCompleteArn(scope, "databaseSecret", databaseSecretArn);
 
     vars.put("SPRING_PROFILES_ACTIVE", springProfile);
+
+    // [N]:jpa - We add the default environment variables Spring Boot uses for defining the database connection. We combine the parameters EndpointAddress, EndpointPort, and DBName to create a valid JDBC URL of this format: jdbc:postgresql://{EndpointAddress}:{EndpointPort}/{DBName}
     vars.put("SPRING_DATASOURCE_URL",
       String.format("jdbc:postgresql://%s:%s/%s",
         databaseOutputParameters.getEndpointAddress(),
         databaseOutputParameters.getEndpointPort(),
         databaseOutputParameters.getDbName()));
+
+    // [N]:jpa - We load the username and password from the Secret we created in the database stack.
     vars.put("SPRING_DATASOURCE_USERNAME",
       databaseSecret.secretValueFromJson("username").toString());
     vars.put("SPRING_DATASOURCE_PASSWORD",

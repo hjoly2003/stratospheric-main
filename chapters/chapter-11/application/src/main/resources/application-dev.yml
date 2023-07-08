@@ -1,4 +1,6 @@
+# [N]:local - For local development, connecting to local Docker containers, and overriding the AWS clients to point to localhost.
 spring:
+  # [N]:local]:postgres - For emulating AWS RDS (Relational Database Service). [!] The latest version of LocalStack supports RDS.  
   datasource:
     url: jdbc:postgresql://localhost:5432/stratospheric
     username: stratospheric

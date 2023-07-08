@@ -1,3 +1,5 @@
+-- [N]:flyway - Data file
+
 INSERT INTO PERSON (EMAIL, NAME) VALUES ('info@stratospheric.dev', 'Duke');
 INSERT INTO PERSON (EMAIL, NAME) VALUES ('tom@stratospheric.dev', 'Tom');
 INSERT INTO PERSON (EMAIL, NAME) VALUES ('bjoern@stratospheric.dev', 'Bjoern');

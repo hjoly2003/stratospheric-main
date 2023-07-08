@@ -202,6 +202,8 @@ Resources:
                 !Ref 'UserPoolClientSecret'
             - Name: AWS_REGION
               Value: !Ref "AWS::Region"
+
+            # [N]:jpa - We add the default environment variables Spring Boot uses for defining the database connection.
             - Name: SPRING_DATASOURCE_URL
               Value: !Join
                - ''

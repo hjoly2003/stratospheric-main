@@ -1,3 +1,5 @@
+-- [N]:flyway - Schema file
+
 create table PERSON
 (
 	ID BIGSERIAL not null primary key,

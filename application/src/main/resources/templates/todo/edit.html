@@ -10,6 +10,7 @@
 <section class="section" layout:fragment="page-content">
   <div class="row">
     <div class="col-md-6 offset-md-3">
+      <!-- [N]:spring]:mvc - Refers to the todos injected by the TodoController -->
       <form
         id="todo-form"
         th:action="${editMode?.name() == 'UPDATE'}?@{/todo/update/{id}(id=${todo.id})}:@{/todo}"

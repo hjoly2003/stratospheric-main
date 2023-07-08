@@ -23,6 +23,7 @@
       </tr>
       </thead>
       <tbody>
+      <!-- [N]:spring]:mvc - Refers to the todos injected by the TodoController -->
       <tr th:each="todo : ${todos}">
         <td>
           <a th:href="@{/todo/show/{id}(id=${todo.id})}">[[${todo.id}]]</a>

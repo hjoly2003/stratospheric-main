@@ -22,9 +22,6 @@ spring:
       credentials:
         secret-key: foo
         access-key: bar
-      endpoint: http://localhost:4566
-      region:
-        static: us-east-1
 
 custom:
   # [N]:local]:cognito - We don't want to connect to the real Cognito.

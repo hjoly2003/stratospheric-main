@@ -42,8 +42,8 @@
         <a class="nav-link disabled" href="#">Howdy, [[${#authentication.principal.attributes.name}]]!</a>
       </li>
         
-        <!-- [N]:logout - To log out of the web session. The /logout route is the default location of Spring Security for handling the logout process. -->
-        <li class="nav-item" sec:authorize="isAuthenticated()">
+      <!-- [N]:logout - To log out of the web session. The /logout route is the default location of Spring Security for handling the logout process. -->
+      <li class="nav-item" sec:authorize="isAuthenticated()">
         <form th:action="@{/logout}" method="post">
           <input class="btn btn-danger" type="submit" value="Logout">
         </form>

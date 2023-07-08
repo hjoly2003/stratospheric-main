@@ -13,6 +13,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * [N]:jpa
+ */
 @Entity
 public class Todo {
 
