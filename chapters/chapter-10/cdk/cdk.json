@@ -1,13 +1,16 @@
 {
   "context": {
     "applicationName": "todo-app",
-    "region": "eu-central-1",
-    "accountId": "221875718260",
-    "environmentName": "staging",
+    "region": "us-east-1",
+    "accountId": "254857894179",
     "springProfile": "aws",
-    "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest",
-    "applicationUrl": "https://app.stratospheric.dev",
-    "loginPageDomainPrefix": "staging-stratospheric",
-    "sslCertificateArn": "arn:aws:acm:eu-central-1:221875718260:certificate/8d92169c-ea74-4086-b407-b951429ac2b1"
+    "environmentName": "staging",
+    "applicationUrl": "https://app.hjolystratos.net",
+
+    "comment1": "[?]:usr-signup]:security - The prefix of the user pool web UI for users to log in. The complete URL is https://<loginPageDomainPrefix>.auth.'region>.amazoncognito.com",
+    "loginPageDomainPrefix": "staging-hjolystratos",
+
+    "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a",
+    "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
   }
 }

@@ -52,3 +52,51 @@ gradle bootRun
 ```
 
 Open your browser to `http://localhost:8080/`.
+
+We can still log in to the Todo application by using one of the pre-defined users:
+* `tom` with password `stratospheric`
+* `bjoern` with password `stratospheric`
+* `philip` with password `stratospheric`
+
+### Chapter 10 (Deploying to AWS)
+
+To bootstrap our AWS environment
+
+```bash
+cdk bootstrap aws://<ACCOUNT_ID>/<REGION>
+```
+
+Since we're building the application on an arm64 platform, we need to create a Docker image compatible to the default AWS ECS architecture
+
+```bash
+cd chapter-10/application
+gradle build
+# The following requires Docker to be running: it builds the image in x86_64 and push it to DockerHub
+docker buildx build --platform=linux/amd64 -t hjolydocker/todo-app-v1:latest --push .
+```
+
+#### Deploying the Generated CDK App:
+
+```bash
+cd chapter-10/cdk
+npm run network:deploy
+npm run cognito:deploy
+npm run service:deploy
+```
+
+Then, have a look around in the AWS Console to see the resources those commands created.
+Don't forget to delete the stacks afterward:
+
+```bash
+npm run service:destroy
+npm run cognito:destroy
+npm run network:destroy
+```
+
+#### To delete the CDKToolkit stack:
+
+1. open its "Resources" tab from the CloudFormation.
+2. Within the resource tab, copy the "Physical ID" of the AWS::S3::Bucket.
+3. Within the S3 Management Console, select that same bucket and click the "Empty" button.
+4. For that bucket click the "Delete" button.
+5. Back in the CDKToolkit stack within the CloudFormation window, click the "Delete" button.

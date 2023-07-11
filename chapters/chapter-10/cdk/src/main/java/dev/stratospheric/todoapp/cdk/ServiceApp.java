@@ -77,7 +77,7 @@ public class ServiceApp {
       .withHealthCheckIntervalSeconds(30)
       // [N]:cognito - The Service construct of our cdk-constructs library now takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
       .withTaskRolePolicyStatements(List.of(
-        // [N]:cognito - The following policy allows all operations for cognito-idp (IdP: identity Provider)
+        // [N]:cognito - The following policy allows all operations (like creating a user) on cognito-idp (IdP: identity Provider)
         PolicyStatement.Builder.create()
           .sid("AllowCreatingUsers")
           .effect(Effect.ALLOW)
