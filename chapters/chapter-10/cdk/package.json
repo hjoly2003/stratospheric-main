@@ -9,12 +9,17 @@
     "network:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.NetworkApp\" --force --require-approval never",
     "repository:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.DockerRepositoryApp\" --require-approval never",
     "repository:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.DockerRepositoryApp\" --force --require-approval never",
-    "service:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.ServiceApp\" --require-approval never",
-    "service:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.ServiceApp\" --force --require-approval never",
 
-    "comment": "[N]:cognito",
+    "comment1": "[N]:cognito",
     "cognito:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CognitoApp\" --require-approval never",
-    "cognito:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CognitoApp\" --force --require-approval never"
+    "cognito:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.CognitoApp\" --force --require-approval never",
+    "service:deploy": "cdk deploy --all --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.ServiceApp\" --require-approval never",
+    "service:destroy": "cdk destroy --all --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.ServiceApp\" --force --require-approval never",
+
+    "comment2": "[N]:part-I-addendum]:a_record",
+    "domain:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.DomainApp\" --require-approval never",
+    "domain:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.stratospheric.todoapp.cdk.DomainApp\" --force --require-approval never"
+
   },
   "devDependencies": {
     "aws-cdk": "2.43.1"

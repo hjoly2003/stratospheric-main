@@ -1,9 +1,9 @@
-package dev.stratospheric.registration;
-
-import org.springframework.beans.factory.annotation.Value;
+package dev.stratospheric.todoapp.registration;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Set;
 
 /**

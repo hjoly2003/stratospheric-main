@@ -1,4 +1,4 @@
-package dev.stratospheric.registration;
+package dev.stratospheric.todoapp.registration;
 
 /**
  * [N]:usr-signup - Performs the actual user registration to the RegistrationService.<p/>

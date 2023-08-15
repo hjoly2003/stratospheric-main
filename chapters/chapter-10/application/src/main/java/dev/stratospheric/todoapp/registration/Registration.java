@@ -1,4 +1,4 @@
-package dev.stratospheric.registration;
+package dev.stratospheric.todoapp.registration;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

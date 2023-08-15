@@ -1,4 +1,4 @@
-package dev.stratospheric.registration;
+package dev.stratospheric.todoapp.registration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;

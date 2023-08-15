@@ -1,10 +1,5 @@
 package dev.stratospheric.todoapp.cdk;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import dev.stratospheric.cdk.ApplicationEnvironment;
 import dev.stratospheric.cdk.Network;
 import dev.stratospheric.cdk.Service;
@@ -16,6 +11,11 @@ import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 
 import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ServiceApp {
 
@@ -57,55 +57,64 @@ public class ServiceApp {
     // We're making this parameters stack unique with each deployment by adding a timestamp, because updating an existing
     // parameters stack will fail because the parameters may be used by an old service stack.
     // This means that each update will generate a new parameters stack that needs to be cleaned up manually!
-    long timestamp = System.currentTimeMillis();
+    // [!]long timestamp = System.currentTimeMillis();
+    String timestamp = "202308090709";
     Stack parametersStack = new Stack(app, "ServiceParameters-" + timestamp, StackProps.builder()
       .stackName(applicationEnvironment.prefix("Service-Parameters-" + timestamp))
       .env(awsEnvironment)
       .build());
-
-    CognitoStack.CognitoOutputParameters cognitoOutputParameters =
-      CognitoStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
     Stack serviceStack = new Stack(app, "ServiceStack", StackProps.builder()
       .stackName(applicationEnvironment.prefix("Service"))
       .env(awsEnvironment)
       .build());
 
-    Service.DockerImageSource dockerImageSource = new Service.DockerImageSource(dockerImageUrl);
-    Network.NetworkOutputParameters networkOutputParameters = Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName());
-    Service.ServiceInputParameters serviceInputParameters = new Service.ServiceInputParameters(dockerImageSource,Collections.emptyList(), environmentVariables(springProfile, cognitoOutputParameters))
-      .withHealthCheckIntervalSeconds(30)
-      // [N]:cognito - The Service construct of our cdk-constructs library now takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
-      .withTaskRolePolicyStatements(List.of(
-        // [N]:cognito - The following policy allows all operations (like creating a user) on cognito-idp (IdP: identity Provider)
-        PolicyStatement.Builder.create()
-          .sid("AllowCreatingUsers")
-          .effect(Effect.ALLOW)
-          .resources(
-            List.of(String.format("arn:aws:cognito-idp:%s:%s:userpool/%s", region, accountId, cognitoOutputParameters.getUserPoolId()))
-          )
-          .actions(List.of(
-            "cognito-idp:AdminCreateUser"
-          ))
-          .build())
-      );
+    CognitoStack.CognitoOutputParameters cognitoOutputParameters =
+      CognitoStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
-    Service service = new Service(
+
+    new Service(
       serviceStack,
       "Service",
       awsEnvironment,
       applicationEnvironment,
-      serviceInputParameters,
-      networkOutputParameters);
+      new Service.ServiceInputParameters(
+        new Service.DockerImageSource(dockerImageUrl),
+        Collections.emptyList(), 
+        environmentVariables(
+          springProfile, 
+          cognitoOutputParameters))
+        // [N]:security]:cognito - The Service construct of our cdk-constructs library takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
+        .withTaskRolePolicyStatements(List.of(
+          // [N]:cognito - The following policy allows all operations (like creating a user) on cognito-idp (IdP: identity Provider)
+          PolicyStatement.Builder.create()
+            .sid("AllowCreatingUsers")
+            .effect(Effect.ALLOW)
+            .resources(
+              // [N] The cognito-identity prefix refers to Identity Pools.
+              List.of(String.format("arn:aws:cognito-idp:%s:%s:userpool/%s", region, accountId, cognitoOutputParameters.getUserPoolId()))
+            )
+            .actions(List.of("cognito-idp:AdminCreateUser")).build()
+          )
+        )
+        // [N]:security - Ensures that users are always routed to the same service instance they were assigned to on their first request. Otherwize, having many instances of the application running in parallel exposes us to the risk of a session validation failure  or user authentication failure as these are node dependent (see "Shortcomings when Scaling Out" from Stratospheric chapter 10).
+        .withStickySessionsEnabled(true)
+        .withHealthCheckIntervalSeconds(30), // needs to be long enough to allow for slow start up with low-end computing instances
+      Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName()));
 
     app.synth();
   }
 
+  /**
+   * @param springProfile
+   * @param cognitoOutputParameters
+   * @return [N]:jpa A map of all environment variables that should be injected into the Docker container of our Spring Boot app.
+   */
   static Map<String, String> environmentVariables(String springProfile, CognitoStack.CognitoOutputParameters cognitoOutputParameters) {
     Map<String, String> vars = new HashMap<>();
     vars.put("SPRING_PROFILES_ACTIVE", springProfile);
 
-    // [N]:security - Makes Cognito secure parameters available to the application's Spring security initialization. For the sake of simplicity, we're passing them as plain-text parameters instead of encrypted values.
+    // [N]:security]:cognito - Makes Cognito secure parameters available to the application's Spring security initialization. For the sake of simplicity, we're passing them as plain-text parameters instead of encrypted values.
     vars.put("COGNITO_CLIENT_ID", cognitoOutputParameters.getUserPoolClientId());
     vars.put("COGNITO_CLIENT_SECRET", cognitoOutputParameters.getUserPoolClientSecret());
     vars.put("COGNITO_USER_POOL_ID", cognitoOutputParameters.getUserPoolId());

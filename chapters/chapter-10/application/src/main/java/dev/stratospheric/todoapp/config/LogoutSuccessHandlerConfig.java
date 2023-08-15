@@ -1,4 +1,4 @@
-package dev.stratospheric.config;
+package dev.stratospheric.todoapp.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +25,8 @@ public class LogoutSuccessHandlerConfig {
   @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "true")
   public LogoutSuccessHandler cognitoOidcLogoutSuccessHandler(
     @Value("${COGNITO_CLIENT_ID}") String clientId,
-    @Value("${COGNITO_USER_POOL_LOGOUT_URL}") String userPoolLogoutUrl) {
+    @Value("${COGNITO_LOGOUT_URL}") String userPoolLogoutUrl)
+  {
     return new CognitoOidcLogoutSuccessHandler(userPoolLogoutUrl, clientId);
   }
 

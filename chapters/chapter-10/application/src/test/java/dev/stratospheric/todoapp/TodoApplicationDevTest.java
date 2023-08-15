@@ -1,4 +1,4 @@
-package dev.stratospheric;
+package dev.stratospheric.todoapp;
 
 import java.io.File;
 import java.time.Duration;

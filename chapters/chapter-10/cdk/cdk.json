@@ -3,14 +3,24 @@
     "applicationName": "todo-app",
     "region": "us-east-1",
     "accountId": "254857894179",
-    "springProfile": "aws",
-    "environmentName": "staging",
     "applicationUrl": "https://app.hjolystratos.net",
+    
+    "comment1": "[?]:usr-signup]:security - [loginPageDomainPrefix: staging-hjolystratos] The prefix of the user pool web UI for users to log in. The complete URL is https://<loginPageDomainPrefix>.auth.<region>.amazoncognito.com",
+    "loginPageDomainPrefix": "stratospheric-staging",
+    "environmentName": "staging",
+    "springProfile": "aws",
 
-    "comment1": "[?]:usr-signup]:security - The prefix of the user pool web UI for users to log in. The complete URL is https://<loginPageDomainPrefix>.auth.'region>.amazoncognito.com",
-    "loginPageDomainPrefix": "staging-hjolystratos",
-
+    "comment": "[N]:part-I-addendum]:domain",
+    "applicationDomain": "app.hjolystratos.net",
+    
+    
+    "comment2": "[N]:part-I-addendum]:cert",
     "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a",
+
+    "comment3": "[N]:part-I-addendum]:a_record",
+    "hostedZoneDomain": "hjolystratos.net",
+    
+    "comment4": "[N]: Specifies the source of the Docker image that we want to deploy.",
     "dockerImageUrl": "docker.io/hjolydocker/todo-app-v1:latest"
   }
 }

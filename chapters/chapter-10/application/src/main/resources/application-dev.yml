@@ -15,14 +15,30 @@ spring:
         provider:
           cognito:
             issuerUri: http://localhost:8888/auth/realms/stratospheric
+  # [?] Required?
+  # thymeleaf:
+  #   cache: false
+  #   prefix: file:src/main/resources/templates/
+  # web:
+  #   resources:
+  #     static-locations: file:src/main/resources/static/
+  #     cache:
+  #       period: 0
   cloud:
     aws:
       # [N]:local]:localstack - We have to override our Java AWS SDK clients to connect to LocalStack. With Spring Cloud AWS, we can conveniently override the endpoint URLs and regions for all AWS SDK clients. 
       # [N]:local]:localstack - When it comes to configuring the AWS credentials for the local setup, LocalStack bypasses any AWS client authentication hence, we hardcode the AWS credentials with any value.
       credentials:
-        secret-key: foo
-        access-key: bar
+        access-key: foo
+        secret-key: bar
+      # # [?] Required?
+      # endpoint: http://localhost:4566
+      # region:
+      #   static: us-east-1
 
 custom:
   # [N]:local]:cognito - We don't want to connect to the real Cognito.
   use-cognito-as-identity-provider: false
+  # # [?] Required?
+  # environment: local
+
