@@ -14,7 +14,7 @@
 <section class="section" layout:fragment="page-content">
   <div class="container">
     
-    <!-- [N]:web-filter - I include a button to allow users to log in. We’ll only show this button whenever an unauthenticated visitor loads our application. -->
+    <!-- [N]:web-filter - A button to allow users to log in. We’ll only show this button whenever an unauthenticated visitor loads our application. -->
     <!-- [N]:security - Spring Security accessible through the 'sec' prefix -->
     <div sec:authorize="isAnonymous()">
       <p>Seems like you are not logged-in yet. Please login first to see your Todos.</p>

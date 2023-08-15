@@ -13,8 +13,8 @@ public class CdkApp {
 
     new CdkStack(app, "CdkStack", StackProps.builder()
       .env(Environment.builder()
-        .account("221875718260")
-        .region("ap-southeast-2")
+        .account("254857894179")
+        .region("us-east-1")
         .build())
       .build());
 

@@ -1,10 +1,5 @@
 package dev.stratospheric.todoapp.cdk;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import dev.stratospheric.cdk.ApplicationEnvironment;
 import dev.stratospheric.cdk.Network;
 import dev.stratospheric.cdk.PostgresDatabase;
@@ -20,6 +15,11 @@ import software.amazon.awscdk.services.secretsmanager.Secret;
 import software.constructs.Construct;
 
 import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
 
@@ -111,7 +111,10 @@ public class ServiceApp {
           activeMqOutputParameters,
           springProfile,
           environmentName))
-        // [N]:security - The Service construct of our cdk-constructs library now takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
+        .withCpu(512)
+        .withMemory(1024)
+
+        // [N]:security]:cognito - The Service construct of our cdk-constructs library takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
         .withTaskRolePolicyStatements(List.of(
           PolicyStatement.Builder.create()
             .sid("AllowSQSAccess")
@@ -130,22 +133,19 @@ public class ServiceApp {
               "sqs:ChangeMessageVisibility",
               "sqs:GetQueueAttributes"))
             .build(),
-          // [N]:cognito - The following policy allows all operations for cognito-idp (IdP: identity Provider)
+          // [N]:cognito - The following policy allows all operations (like creating a user) on cognito-idp (IdP: identity Provider)
           PolicyStatement.Builder.create()
             .sid("AllowCreatingUsers")
             .effect(Effect.ALLOW)
             .resources(
               List.of(String.format("arn:aws:cognito-idp:%s:%s:userpool/%s", region, accountId, cognitoOutputParameters.getUserPoolId()))
             )
-            .actions(List.of(
-              "cognito-idp:AdminCreateUser"
-            ))
-            .build(),
+            .actions(List.of("cognito-idp:AdminCreateUser")).build(),
           PolicyStatement.Builder.create()
             .sid("AllowSendingEmails")
             .effect(Effect.ALLOW)
             .resources(
-              List.of(String.format("arn:aws:ses:%s:%s:identity/stratospheric.dev", region, accountId))
+              List.of(String.format("arn:aws:ses:%s:%s:identity/hjolystratos.net", region, accountId))
             )
             .actions(List.of(
               "ses:SendEmail",

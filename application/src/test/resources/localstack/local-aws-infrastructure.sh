@@ -5,11 +5,11 @@
 # [N]:local]:init_script - Creates an AWS SQS queue. 
 awslocal sqs create-queue --queue-name stratospheric-todo-sharing
 
-awslocal ses verify-email-identity --email-address noreply@stratospheric.dev
-awslocal ses verify-email-identity --email-address info@stratospheric.dev
-awslocal ses verify-email-identity --email-address tom@stratospheric.dev
-awslocal ses verify-email-identity --email-address bjoern@stratospheric.dev
-awslocal ses verify-email-identity --email-address philip@stratospheric.dev
+awslocal ses verify-email-identity --email-address noreply@hjolystratos.net
+awslocal ses verify-email-identity --email-address info@hjolystratos.net
+awslocal ses verify-email-identity --email-address tom@hjolystratos.net
+awslocal ses verify-email-identity --email-address bjoern@hjolystratos.net
+awslocal ses verify-email-identity --email-address philip@hjolystratos.net
 
 # [N]:local]:init_script - Creates a dynamo DB
 awslocal dynamodb create-table \

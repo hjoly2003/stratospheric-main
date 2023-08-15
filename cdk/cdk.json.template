@@ -1,21 +1,21 @@
 {
   "context": {
     "applicationName": "todo-app",
-    "region": "eu-central-1",
-    "accountId": "547530709389",
+    "region": "us-east-1",
+    "accountId": "254857894179",
     "dockerRepositoryName": "todo-app",
     "dockerImageTag": "DYNAMICALLY_OVERRIDDEN_BY_WORKFLOW",
-    "applicationUrl": "https://app.utilzr.io",
-    "loginPageDomainPrefix": "app-utilzr",
+    "applicationUrl": "https://app.hjolystratos.net",
+    "loginPageDomainPrefix": "stratospheric-staging",
     "environmentName": "staging",
     "springProfile": "aws",
     "activeMqUsername": "activemqUser",
     "canaryUsername": "canary",
     "canaryUserPassword": "SECRET_OVERRIDDEN_BY_WORKFLOW",
-    "confirmationEmail": "philip@stratospheric.dev",
-    "applicationDomain": "app.utilzr.io",
-    "sslCertificateArn": "arn:aws:acm:eu-central-1:547530709389:certificate/4db31ae5-157b-4673-aef2-abe89e1f2a88",
-    "hostedZoneDomain": "utilzr.io",
+    "confirmationEmail": "info@hjolystratos.net",
+    "applicationDomain": "app.hjolystratos.net",
+    "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a",
+    "hostedZoneDomain": "hjolystratos.net",
     "githubToken": "SECRET_OVERRIDDEN_BY_WORKFLOW"
   }
 }

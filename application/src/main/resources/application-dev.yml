@@ -41,17 +41,18 @@ spring:
       endpoint: http://localhost:4566
       region:
         static: us-east-1
+  activemq:
+    password: admin
+    user: admin
+    broker-url: localhost:61613
 
 management:
-  metrics:
-    export:
-      cloudwatch:
+  cloudwatch:
+    metrics:
+      export:
         enabled: false
 
 custom:
-  web-socket-relay-endpoint: localhost:61613
-  web-socket-relay-username: admin
-  web-socket-relay-password: admin
   web-socket-relay-use-ssl: false
   auto-confirm-collaborations: true
   provide-test-todo-controller: true

@@ -1,6 +1,6 @@
 plugins {
-  id 'org.springframework.boot' version '3.1.1'
-  id 'io.spring.dependency-management' version '1.1.0'
+  id 'org.springframework.boot' version '3.1.2'
+  id 'io.spring.dependency-management' version '1.1.3'
   id 'com.gorylenko.gradle-git-properties' version '2.4.1'
   id 'java'
 }
@@ -18,11 +18,10 @@ ext {
   set('selenium.version', '4.9.1')
   set('httpclient5.version', '5.2.1')
   set('awsSpringVersion', '3.0.1')
-  set('testcontainersVersion', '1.18.1')
-  set('jsr305Version', '3.0.2')
+  set('testcontainersVersion', '1.18.3')
   set('logbackAwslogsJsonEncoderVersion', '1.1.1')
   set('errorHandlingSpringBootStarterVersion', '4.1.0')
-  set('selenideVersion', '6.14.1')
+  set('selenideVersion', '6.15.0')
 }
 
 dependencies {
@@ -50,25 +49,26 @@ dependencies {
   implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
   implementation 'io.awspring.cloud:spring-cloud-aws-starter-dynamodb'
   implementation 'io.micrometer:micrometer-registry-cloudwatch'
-  implementation "org.springframework.boot:spring-boot-starter-activemq"
+  implementation 'org.springframework.boot:spring-boot-starter-activemq'
+  implementation 'org.apache.activemq:activemq-stomp'
+  implementation 'org.apache.activemq:activemq-kahadb-store'
   
   // [N]:webjars - For the JavaScript and CSS libraries that our frontend requires (see ttps://www.webjars.org/).
   implementation 'org.webjars:webjars-locator-core'
   implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
   implementation 'org.webjars:sockjs-client:1.5.1'
   implementation 'org.webjars:stomp-websocket:2.3.4'
-  implementation 'org.webjars:bootstrap:5.3.0'
-  implementation 'org.webjars:popper.js:2.9.3'
-  implementation 'org.webjars:jquery:3.6.4'
+  implementation 'org.webjars:bootstrap:5.3.1'
+  implementation 'org.webjars:popper.js:2.11.7'
+  implementation 'org.webjars:jquery:3.7.0'
   implementation 'org.webjars:font-awesome:6.4.0'
   
   // [N]:flyway
   implementation 'org.flywaydb:flyway-core'
 
-  // [N]:cognito - For communicating with Cognito
+  // [N]:security]:cognito - Used by Spring Cloud AWS to align all AWS Java SDK versions for communicating with Cognito.
   implementation 'software.amazon.awssdk:cognitoidentityprovider'
 
-  implementation "com.google.code.findbugs:jsr305:${jsr305Version}"
   implementation "de.siegmar:logback-awslogs-json-encoder:${logbackAwslogsJsonEncoderVersion}"
   implementation "io.github.wimdeblauwe:error-handling-spring-boot-starter:${errorHandlingSpringBootStarterVersion}"
 
@@ -85,7 +85,6 @@ dependencies {
   testImplementation 'org.testcontainers:localstack'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:postgresql'
-  testImplementation 'org.testcontainers:localstack'
   testImplementation "com.codeborne:selenide:${selenideVersion}"
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }

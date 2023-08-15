@@ -1,7 +1,6 @@
 package dev.stratospheric.todoapp.cdk;
 
 import dev.stratospheric.cdk.Network;
-import dev.stratospheric.cdk.Network.NetworkInputParameters;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;
@@ -38,18 +37,12 @@ public class NetworkApp {
       .env(awsEnvironment)
       .build());
 
-    NetworkInputParameters inputParameters = new NetworkInputParameters();
-
-    if(sslCertificateArn != null && !sslCertificateArn.isEmpty()){
-      inputParameters.withSslCertificateArn(sslCertificateArn);
-    }
-
     Network network = new Network(
       networkStack,
       "Network",
       awsEnvironment,
       environmentName,
-      inputParameters);
+      new Network.NetworkInputParameters(sslCertificateArn));
 
     app.synth();
   }

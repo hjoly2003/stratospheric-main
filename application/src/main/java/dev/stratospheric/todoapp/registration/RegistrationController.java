@@ -23,18 +23,29 @@ public class RegistrationController {
     this.registrationService = registrationService;
   }
 
+  /**
+   * [N] Instantiates an empty {@link Registration} object to be filled by the user.
+   */
   @GetMapping
   public String getRegisterView(Model model) {
     model.addAttribute("registration", new Registration());
     return "register";
   }
 
+  /**
+   * [N] End point for submitting a user registration
+   * @param registration
+   * @param bindingResult [?] Used to ensure that our model matches our validation rules: no empty email or username (as definded through the {@code @NotEmpty} annotation in the {@link Person} model).
+   * @param model
+   * @param redirectAttributes
+   * @return
+   */
   @PostMapping
   public String registerUser(@Valid Registration registration,
                              BindingResult bindingResult,
                              Model model, RedirectAttributes redirectAttributes) {
     
-    // Ensures that our model matches our validation rules: no empty email or username (as definded through the @NotEmpty annotation in the Person model).
+    // [?] Ensures that our model matches our validation rules: no empty email or username (as definded through the @NotEmpty annotation in the Person model).
     if (bindingResult.hasErrors()) {
       model.addAttribute("registration", registration);
       return "register";

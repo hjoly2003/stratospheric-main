@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 /**
  * [N]:web-filter - Establishes rules for public and private access to the site.
  */
@@ -26,30 +28,25 @@ public class WebSecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
       // Enables CSRF protection (to prevent a Cross-Site-Request-Forgery attack).
-      .csrf()
-      .ignoringRequestMatchers(
+      .csrf(csrf -> csrf.ignoringRequestMatchers(
         "/stratospheric-todo-updates/**",
         "/websocket/**"
-      )
-      .and()
+      ))
       // Configures the authentication support for OIDC. With oauth2Login, Spring Security refers to either OAuth 2.0 and/or OpenID Connect 1.0 authentication. 
-      .oauth2Login()
-      .and()
+      .oauth2Login(withDefaults())
 
       // Permits any request to our static resources and public endpoints/views. 
-      .authorizeHttpRequests()
-      .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
-      .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-      .requestMatchers("/", "/register").permitAll()
-      .anyRequest().authenticated()
+      .authorizeHttpRequests(httpRequests -> httpRequests
+        .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
+        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+        .requestMatchers("/", "/register").permitAll()
+        .anyRequest().authenticated())
 
-      .and()
-      .logout()
       // [N] To make our HttpSecurity configuration aware of this logout handler
-      .logoutSuccessHandler(logoutSuccessHandler);
+      .logout(logout -> logout.logoutSuccessHandler(logoutSuccessHandler));
 
     return httpSecurity.build();
   }

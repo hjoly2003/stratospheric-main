@@ -23,7 +23,7 @@ public abstract class AbstractDevIntegrationTest {
   static LocalStackContainer localStack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.14.3"))
     .withClasspathResourceMapping("/localstack", "/docker-entrypoint-initaws.d", BindMode.READ_ONLY)
     .withEnv("USE_SINGLE_REGION", "true")
-    .withEnv("DEFAULT_REGION", "eu-central-1")
+    .withEnv("DEFAULT_REGION", "us-east-1")
     .withServices(SQS, SES, DYNAMODB)
     .waitingFor(Wait.forLogMessage(".*Initialized\\.\n", 1));
 
@@ -44,7 +44,7 @@ public abstract class AbstractDevIntegrationTest {
     registry.add("spring.datasource.url", () -> database.getJdbcUrl());
     registry.add("spring.security.oauth2.client.provider.cognito.issuerUri", () -> "http://localhost:" + keycloak.getMappedPort(8080) + "/auth/realms/stratospheric");
     registry.add("spring.cloud.aws.endpoint", () -> localStack.getEndpointOverride(SQS).toString());
-    registry.add("custom.web-socket-relay-endpoint", () -> "localhost:" + activeMq.getMappedPort(61613));
+    registry.add("spring.activemq.broker-url", () -> "localhost:" + activeMq.getMappedPort(61613));
   }
 
   static {

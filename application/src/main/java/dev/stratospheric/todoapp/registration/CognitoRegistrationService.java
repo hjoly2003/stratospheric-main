@@ -30,6 +30,9 @@ public class CognitoRegistrationService implements RegistrationService {
     this.userPooldId = userPoolId;
   }
 
+  /**
+   * For the production runtime on AWS, we’ll create a new user as part of our Cognito User Pool.
+   */
   @Override
   public void registerUser(Registration registration) {
     AdminCreateUserRequest registrationRequest = AdminCreateUserRequest.builder()

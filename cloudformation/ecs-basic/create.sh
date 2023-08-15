@@ -14,7 +14,7 @@ aws cloudformation create-stack \
   --parameters \
       ParameterKey=StackName,ParameterValue=stratospheric-ecs-basic-network \
       ParameterKey=ServiceName,ParameterValue=stratospheric-todo-app-v1 \
-      ParameterKey=ImageUrl,ParameterValue=docker.io/stratospheric/todo-app-v1:latest \
+      ParameterKey=ImageUrl,ParameterValue=docker.io/hjolydocker/todo-app-v1:latest \
       ParameterKey=ContainerPort,ParameterValue=8080
 
 aws cloudformation wait stack-create-complete --stack-name stratospheric-ecs-basic-service

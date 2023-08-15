@@ -62,9 +62,9 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                - "arn:aws:iam::221875718260:user/philip@stratospheric.dev"
-                - "arn:aws:iam::221875718260:user/tom@stratospheric.dev"
-                - "arn:aws:iam::221875718260:user/bjoern@stratospheric.dev"
+                - "arn:aws:iam::254857894179:user/philip@hjolystratos.net"
+                - "arn:aws:iam::254857894179:user/tom@hjolystratos.net"
+                - "arn:aws:iam::254857894179:user/bjoern@hjolystratos.net"
                 - !GetAtt ECSTaskExecutionRole.Arn
             Action:
               - "ecr:GetDownloadUrlForLayer"

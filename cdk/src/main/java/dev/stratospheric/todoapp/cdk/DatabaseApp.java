@@ -2,7 +2,6 @@ package dev.stratospheric.todoapp.cdk;
 
 import dev.stratospheric.cdk.ApplicationEnvironment;
 import dev.stratospheric.cdk.PostgresDatabase;
-import dev.stratospheric.cdk.PostgresDatabase.DatabaseInputParameters;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;

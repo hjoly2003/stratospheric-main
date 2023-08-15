@@ -11,6 +11,8 @@ import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 
+import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
+
 public class ServiceApp {
 
   /**
@@ -21,23 +23,23 @@ public class ServiceApp {
 
     // [N] Either "staging" or "production". The environmentName is used to be able to create multiple stacks for different environments from the same CDK app.
     String environmentName = (String) app.getNode().tryGetContext("environmentName");
-    Validations.requireNonEmpty(environmentName, "context variable 'environmentName' must not be null");
+    requireNonEmpty(environmentName, "context variable 'environmentName' must not be null");
 
     String applicationName = (String) app.getNode().tryGetContext("applicationName");
-    Validations.requireNonEmpty(applicationName, "context variable 'applicationName' must not be null");
+    requireNonEmpty(applicationName, "context variable 'applicationName' must not be null");
 
     // [N] AWS account ID asscociated to the IAM user account.
     String accountId = (String) app.getNode().tryGetContext("accountId");
-    Validations.requireNonEmpty(accountId, "context variable 'accountId' must not be null");
+    requireNonEmpty(accountId, "context variable 'accountId' must not be null");
 
     String springProfile = (String) app.getNode().tryGetContext("springProfile");
-    Validations.requireNonEmpty(springProfile, "context variable 'springProfile' must not be null");
+    requireNonEmpty(springProfile, "context variable 'springProfile' must not be null");
 
     String dockerImageUrl = (String) app.getNode().tryGetContext("dockerImageUrl");
-    Validations.requireNonEmpty(dockerImageUrl, "context variable 'dockerImageUrl' must not be null");
+    requireNonEmpty(dockerImageUrl, "context variable 'dockerImageUrl' must not be null");
 
     String region = (String) app.getNode().tryGetContext("region");
-    Validations.requireNonEmpty(region, "context variable 'region' must not be null");
+    requireNonEmpty(region, "context variable 'region' must not be null");
 
     Environment awsEnvironment = makeEnv(accountId, region);
 

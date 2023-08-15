@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 /**
- * [N]:usr-signup]:local - Performs the actual user registration to the RegistrationService.<p/>
+ * [N]:usr-signup]:local - Performs no user registration as it's not working locally.<p/>
  */
 @Service
 @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "false")

@@ -41,6 +41,10 @@ npm run network:deploy
 npm run service:deploy
 ```
 
+To see the todo application in your brower, you can access its public URL under the Elastic Container Service in the AWS Console
+(*Networking* tab -> "Clusters > YOUR_CLUSTER > Services >
+YOUR_SERVICE" -> "DNS names").
+
 Then, have a look around in the AWS Console to see the resources those
 commands created.
 
@@ -52,6 +56,7 @@ npm run network:destroy
 ```
 
 To delete the CDKToolkit stack:
+
 1. open its "Resources" tab from the CloudFormation.
 2. Within the resource tab, copy the "Physical ID" of the AWS::S3::Bucket.
 3. Within the S3 Management Console, select that same bucket and click the "Empty" button.

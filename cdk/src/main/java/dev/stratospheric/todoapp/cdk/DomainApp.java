@@ -5,7 +5,7 @@ import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 
 /**
- * [N]:part-I-addendum]:a_record - Creates a DNS "A record" for associating the "app.stratospheric.dev" Custom Domain for the ELB. This is for enabling users to access the to-do application via that custom domain.
+ * [N]:part-I-addendum]:a_record - Creates a DNS "A record" for associating the "app.hjolystratos.net" Custom Domain for the ELB. This is for enabling users to access the to-do application via that custom domain.
  */
 public class DomainApp {
 
@@ -24,11 +24,11 @@ public class DomainApp {
     String region = (String) app.getNode().tryGetContext("region");
     Validations.requireNonEmpty(region, "context variable 'region' must not be null");
 
-    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.stratospheric.dev
+    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.hjolystratos.net
     String hostedZoneDomain = (String) app.getNode().tryGetContext("hostedZoneDomain");
     Validations.requireNonEmpty(hostedZoneDomain, "context variable 'hostedZoneDomain' must not be null");
 
-    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.stratospheric.dev
+    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.hjolystratos.net
     String applicationDomain = (String) app.getNode().tryGetContext("applicationDomain");
     Validations.requireNonEmpty(applicationDomain, "context variable 'applicationDomain' must not be null");
 

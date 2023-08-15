@@ -8,7 +8,7 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM \
   --parameters \
     ParameterKey=ApplicationName,ParameterValue=stratospheric-users \
-    ParameterKey=ApplicationUrl,ParameterValue=https://app.stratospheric.dev \
+    ParameterKey=ApplicationUrl,ParameterValue=https://app.hjolystratos.net \
     ParameterKey=LoginPageDomainPrefix,ParameterValue=dev101
 
 aws cloudformation wait stack-create-complete --stack-name stratospheric-cognito

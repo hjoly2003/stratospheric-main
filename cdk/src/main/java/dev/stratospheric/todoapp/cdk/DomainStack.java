@@ -38,7 +38,7 @@ class DomainStack extends Stack {
 
     Network.NetworkOutputParameters networkOutputParameters = Network.getOutputParametersFromParameterStore(this, applicationEnvironment.getEnvironmentName());
 
-    // [N] Retrieves our ELB instance using the parameters stored in the SSM parameter store by our previously redeployed Network construct.
+    // [N] Retrieves our ELB instance using the parameters stored in the SSM parameter store by our redeployed Network construct.
     IApplicationLoadBalancer applicationLoadBalancer = ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(
       this,
       "LoadBalancer",
@@ -50,7 +50,7 @@ class DomainStack extends Stack {
         .build()
     );
 
-    // [N] Creates a DNS A record (mapping a domain name to an IP address) for our application domain and points it to our application’s ALB via the ALB’s ARN.
+    // [N] Creates a DNS A-record (mapping a domain name to an IP address) for our application domain and points it to our application’s ALB via the ALB’s ARN.
     ARecord aRecord = ARecord.Builder.create(this, "ARecord")
       .recordName(applicationDomain)
       .zone(hostedZone)

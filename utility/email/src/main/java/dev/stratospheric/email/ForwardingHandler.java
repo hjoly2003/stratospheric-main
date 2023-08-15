@@ -68,21 +68,21 @@ public class ForwardingHandler implements RequestHandler<S3Event, Void> {
 
       for (Address address : receivers) {
         var emailAddress = address.toString();
-        if (emailAddress.contains("info@stratospheric.dev")) {
+        if (emailAddress.contains("info@hjolystratos.net")) {
           forwardingRecipients.add(EMAIL_BJOERN);
           forwardingRecipients.add(EMAIL_PHILIP);
           forwardingRecipients.add(EMAIL_TOM);
         }
 
-        if (emailAddress.contains("bjoern@stratospheric.dev")) {
+        if (emailAddress.contains("bjoern@hjolystratos.net")) {
           forwardingRecipients.add(EMAIL_BJOERN);
         }
 
-        if (emailAddress.contains("philip@stratospheric.dev")) {
+        if (emailAddress.contains("philip@hjolystratos.net")) {
           forwardingRecipients.add(EMAIL_PHILIP);
         }
 
-        if (emailAddress.contains("tom@stratospheric.dev")) {
+        if (emailAddress.contains("tom@hjolystratos.net")) {
           forwardingRecipients.add(EMAIL_TOM);
         }
       }
@@ -140,7 +140,7 @@ public class ForwardingHandler implements RequestHandler<S3Event, Void> {
         .withDestination(
           new Destination().withToAddresses(recipient))
         .withMessage(emailContent)
-        .withSource("noreply@stratospheric.dev")
+        .withSource("noreply@hjolystratos.net")
         .withReplyToAddresses(from);
 
       sesClient.sendEmail(sendEmailRequest);

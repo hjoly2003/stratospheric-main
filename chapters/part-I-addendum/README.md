@@ -4,7 +4,8 @@
 
 In this chapter, we’ll do the following:
 
-* ]:domain - add a custom domain to our application
+* ]:domain - add a custom domain to our application.
+  * Note: in `./cdk/cdk.context.json`, we have the property `hosted-zone:account=<ACCOUNT_ID>:domainName=<DOMAIN_NAME>:region=<REGION>` that refers to a hosted zone object (once we have successfully created our domain).  Its "Hosted zone ID" can be found in the "Route 53 > Hosted zones" page, in the AWS Console.
 * ]:cert	 - create and install an SSL certificate for that domain
 * ]:https-redirect - redirect any unencrypted http calls to https
 * ]:a_record - create a DNS A record to route calls from that domain to our application.
@@ -44,6 +45,8 @@ certificate (staging-todo-app-Certificate)
 Outputs:
 certificate.sslCertificateArn = arn:aws:acm:us-east-1:...:certificate/...
 ```
+
+If we have the certificate already deployed on AWS, you can get its ARN by going to the CloudFormation in the AWS Console. Select the "staging-dodo-app-Certificate" and choose its "Resources" tab. Its arn is in the Physical ID column.
 
 Lets copy that ARN into the `./cdk/cdk.json`'s `sslCertificateArn` property.
 

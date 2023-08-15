@@ -7,7 +7,7 @@ provider:
   name: aws
   runtime: java17
   stage: dev
-  region: eu-central-1
+  region: us-east-1
   timeout: 10
   memorySize: 1024
   logRetentionInDays: 7
@@ -24,7 +24,7 @@ provider:
         - ses:SendRawEmail
         - ses:SendEmail
       Resource:
-        - arn:aws:ses:eu-west-1:221875718260:identity/*
+        - arn:aws:ses:us-east-1:254857894179:identity/*
 
 custom:
   emailBucket: stratospheric-emails
@@ -76,4 +76,4 @@ resources:
                 Service: ses.amazonaws.com
               Condition:
                 StringEquals:
-                  aws:Referer: 221875718260
+                  aws:Referer: 254857894179

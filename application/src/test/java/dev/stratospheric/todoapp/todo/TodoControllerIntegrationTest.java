@@ -43,7 +43,7 @@ class TodoControllerIntegrationTest extends AbstractDevIntegrationTest {
   @Test
   void shouldAllowCrudOperationOnTodo() throws Exception {
 
-    OidcUser todoOwner = createOidcUser("duke@stratospheric.dev", "duke");
+    OidcUser todoOwner = createOidcUser("duke@hjolystratos.net", "duke");
 
     Long createdTodoId = shouldCreateTodo(todoOwner);
     shouldAllowViewingTodo(createdTodoId, todoOwner);
@@ -55,7 +55,7 @@ class TodoControllerIntegrationTest extends AbstractDevIntegrationTest {
   @Test
   void shouldAllowCollaboratingOnSharedTodo() throws Exception {
 
-    OidcUser collaborator = createOidcUser("collaborator@stratospheric.dev", "collaborator");
+    OidcUser collaborator = createOidcUser("collaborator@hjolystratos.net", "collaborator");
 
     Long sharedTodoId = givenSharedTodo();
 
@@ -74,11 +74,11 @@ class TodoControllerIntegrationTest extends AbstractDevIntegrationTest {
   private Long givenSharedTodo() {
     Person todoOwner = new Person();
     todoOwner.setName("duke");
-    todoOwner.setEmail("duke@stratospheric.dev");
+    todoOwner.setEmail("duke@hjolystratos.net");
 
     Person todoCollaborator = new Person();
     todoCollaborator.setName("collaborator");
-    todoCollaborator.setEmail("collaborator@stratospheric.dev");
+    todoCollaborator.setEmail("collaborator@hjolystratos.net");
 
     personRepository.saveAll(List.of(todoCollaborator, todoOwner));
 

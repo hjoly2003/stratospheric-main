@@ -7,6 +7,8 @@ import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 
+import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
+
 public class NetworkApp {
 
   /**
@@ -17,14 +19,14 @@ public class NetworkApp {
 
     // [N] Either "staging" or "production". The environmentName is used to be able to create multiple stacks for different environments from the same CDK app.
     String environmentName = (String) app.getNode().tryGetContext("environmentName");
-    Validations.requireNonEmpty(environmentName, "context variable 'environmentName' must not be null");
+    requireNonEmpty(environmentName, "context variable 'environmentName' must not be null");
 
     // [N] AWS account ID asscociated to the IAM user account.
     String accountId = (String) app.getNode().tryGetContext("accountId");
-    Validations.requireNonEmpty(accountId, "context variable 'accountId' must not be null");
+    requireNonEmpty(accountId, "context variable 'accountId' must not be null");
 
     String region = (String) app.getNode().tryGetContext("region");
-    Validations.requireNonEmpty(region, "context variable 'region' must not be null");
+    requireNonEmpty(region, "context variable 'region' must not be null");
 
     String sslCertificateArn = (String) app.getNode().tryGetContext("sslCertificateArn");
 

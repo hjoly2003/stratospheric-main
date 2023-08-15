@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 public class LogoutSuccessHandlerConfig {
 
   /**
-   * Defines the {@link CognitoOidcLogoutSuccessHandler} as a bean for when {@code custom.use-cognito-as-identity-provider} is set to {@code true} and inject the relevant credentials and region to configure the handler<p/>
+   * [N]:cognito - Defines the {@link CognitoOidcLogoutSuccessHandler} as a bean for when {@code custom.use-cognito-as-identity-provider} is set to {@code true} and inject the relevant credentials and region to configure the handler.<p/>
    * The ${COGNITO_...} environment variables are specified when deploying our Todo application with ECS (see {@link dev.stratospheric.todoapp.cdk.ServiceApp#environmentVariables}).
    * @param clientId
    * @param userPoolLogoutUrl
@@ -25,10 +25,14 @@ public class LogoutSuccessHandlerConfig {
   @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "true")
   public LogoutSuccessHandler cognitoOidcLogoutSuccessHandler(
     @Value("${COGNITO_CLIENT_ID}") String clientId,
-    @Value("${COGNITO_LOGOUT_URL}") String userPoolLogoutUrl) {
+    @Value("${COGNITO_LOGOUT_URL}") String userPoolLogoutUrl)
+  {
     return new CognitoOidcLogoutSuccessHandler(userPoolLogoutUrl, clientId);
   }
 
+  /**
+   * [N]:local - If running locally, we instantiate Spring Security’s OidcClientInitiatedLogoutSuccessHandler as Keycloak already supports the RP-initiated logout specification
+   */
   @Bean
   @ConditionalOnProperty(prefix = "custom", name = "use-cognito-as-identity-provider", havingValue = "false")
   public LogoutSuccessHandler oidcLogoutSuccessHandler(ClientRegistrationRepository clientRegistrationRepository) {

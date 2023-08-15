@@ -1,6 +1,5 @@
 package dev.stratospheric.todoapp.cdk;
 
-import java.security.Security;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -24,16 +23,15 @@ import software.amazon.awscdk.services.cognito.UserPool;
 import software.amazon.awscdk.services.cognito.UserPoolClient;
 import software.amazon.awscdk.services.cognito.UserPoolClientIdentityProvider;
 import software.amazon.awscdk.services.cognito.UserPoolDomain;
-import software.amazon.awscdk.services.events.Authorization;
 import software.amazon.awscdk.services.ssm.StringParameter;
 import software.constructs.Construct;
 
 /**
  * [N]:cognito - Deploys the following 
  * <ul>
- *  <li>a UserPool resource which is a user directory where we can store and manage user information.</li>
- *  <li>a User Pool Client which is associated with a User Pool and has permission to call unauthenticated API operations like signing in or registering users. Therefore, every App Client requires a client ID and an optional secret.</li>
- *  <li>a User Pool Domain which defines the url of the Cognito Identity Provider.</li>
+ *  <li>a <em>UserPool</em> resource which is a user directory where we can store and manage user information.</li>
+ *  <li>a <em>User Pool Client</em> which is associated with a User Pool and has permission to call unauthenticated API operations like signing in or registering users. Therefore, every App Client requires a client ID and an optional secret.</li>
+ *  <li>a <em>User Pool Domain</em> which defines the url of the Cognito Identity Provider.</li>
  * </ul>
  * [N] Note: This level 2 construct configures Amazon Cognito as the email delivery service (for sending the password or a recovery email, for example) instead of Amazon SES. 
  */
@@ -121,7 +119,7 @@ class CognitoStack extends Stack {
       .supportedIdentityProviders(Collections.singletonList(UserPoolClientIdentityProvider.COGNITO))
       .build();
 
-    // [N] Creates a User Pool Domain resource. As we are not using a custom domain for the sign-in page, we’re configuring the prefix for the Amazon Cognito domain. If we deploy this stack to the region eu-central-1 and use “stratospheric” as the LoginPageDomainPrefix, we will get the following sign-in URL: https://stratospheric.auth.eu-central-1-amazoncognito.com.
+    // [N] Creates a User Pool Domain resource. As we are not using a custom domain for the sign-in page, we’re configuring the prefix for the Amazon Cognito domain. If we deploy this stack to the region us-east-1 and use “staging-hjolystratos” as the LoginPageDomainPrefix, we will get the following sign-in URL: https://staging-hjolystratos.auth.us-east-1.amazoncognito.com.
     this.userPoolDomain = UserPoolDomain.Builder.create(this, "userPoolDomain")
       .userPool(this.userPool)
       .cognitoDomain(CognitoDomainOptions.builder()
@@ -141,15 +139,17 @@ class CognitoStack extends Stack {
   private static final String PARAMETER_USER_POOL_PROVIDER_URL = "userPoolProviderUrl";
 
   /**
-   * Exposes the dynamic attributes (SSM parameters) of our Cognito setup that'll get used in the application's configuration of Spring Security.</p>
+   * [N] Exposes the dynamic attributes (SSM parameters) of our Cognito setup that'll get used in the application's configuration of Spring Security.</p>
    * It uses the “parameter store” feature of the AWS Systems Manager (SSM). As our Spring Boot application expects these values on application startup, we have to deploy or update the Cognito stack before triggering a new ECS deployment of our Todo app.</p> 
-   * Note: Since they're randomly generated, we need to expose the IDs of the UserPool, the UserPoolClient and of the UserPoolClientSecret to later fetch the secret of the Onuth 2 client.
-   * @return <ul>
-   *    <li><em>PARAMETER_USER_POOL_ID</em></li>
-   *    <li><em>PARAMETER_USER_POOL_CLIENT_ID</em></li>
-   *    <li><em>PARAMETER_USER_POOL_CLIENT_SECRET</em> Note, for sake of simplicity, this is not encrypted but rather stored in plain text. We could have stored that sensitive configuration value as SecureStrings inside the AWS Parameter Store and use Spring Cloud AWS to fetch the values upon application start (see https://rieckpil.de/resolving-spring-boot-properties-using-the-aws-parameter-store-ssm/).</li> 
-   *    <li><em>PARAMETER_USER_POOL_LOGOUT_URL</em> Required for fully logging out the end user. This URL contains our loginDomainPrefix and the AWS region, which will look something like this: {@code https://stratospheric.auth.eu-central-1.amazoncognito.com/logout}</li>
-   *    <li><em>PARAMETER_USER_POOL_PROVIDER_URL</em> Used in the configuration of Spring Security to discover the OAuth 2.0 relevant endpoints. This URL contains the AWS region and our user pool identifier and will look like this: {@code https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_pD8flsXa}</li>
+   * Note: Since they're randomly generated, we need to expose the IDs of the {@code UserPool}, the {@code UserPoolClient} and of the {@code UserPoolClientSecret} to later fetch the secret of the Oauth 2 client.
+   * @return parameters available from the AWS Console in "AWS Systems Manager"/"Parameter Store"
+   * <ul>
+   *    <li><em>PARAMETER_USER_POOL_ID</em> as staging-todo-app-Cognito-userPoolId in the "Parameter Store"</li>
+   *    <li><em>PARAMETER_USER_POOL_CLIENT_ID</em> as staging-todo-app-Cognito-userPoolClientId</li>
+   *    <li><em>PARAMETER_USER_POOL_CLIENT_SECRET</em> as staging-todo-app-Cognito-userPoolClientSecret. Note, for sake of simplicity, this is not encrypted but rather stored in plain text. We could have stored that sensitive configuration value as SecureStrings inside the AWS Parameter Store and use Spring Cloud AWS to fetch the values upon application start (see https://rieckpil.de/resolving-spring-boot-properties-using-the-aws-parameter-store-ssm/).</li> 
+   *    <li><em>PARAMETER_USER_POOL_LOGOUT_URL</em> as staging-todo-app-Cognito-userPoolLogoutUrl. Required for fully logging out the end user. This URL contains our {@code loginPageDomainPrefix} and the AWS region, which will look something like this: {@code https://staging-hjolystratos.auth.us-east-1.amazoncognito.com/logout}</li>
+   *    <li><em>PARAMETER_USER_POOL_PROVIDER_URL</em> as staging-todo-app-Cognito-userPoolProviderUrl. Used in the configuration of Spring Security to discover the OAuth 2.0 relevant endpoints. This URL contains the AWS region and our user pool identifier and will look like this: {@code https://cognito-idp.us-east-1.amazonaws.com/us-east-1_i3mwmyXqZ}.</li>
+   * </ul>
    */
   private void createOutputParameters() {
 

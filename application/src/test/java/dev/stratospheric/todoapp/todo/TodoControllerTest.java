@@ -43,7 +43,7 @@ class TodoControllerTest {
   @BeforeEach
   void setUp() {
     Person owner = new Person();
-    owner.setEmail("info@stratospheric.dev");
+    owner.setEmail("info@hjolystratos.net");
 
     Todo todo = new Todo();
     todo.setStatus(Status.OPEN);
@@ -53,12 +53,12 @@ class TodoControllerTest {
     todo.setId(1L);
     todo.setOwner(owner);
 
-    given(todoService.getOwnedOrSharedTodo(1L, "info@stratospheric.dev")).willReturn(todo);
+    given(todoService.getOwnedOrSharedTodo(1L, "info@hjolystratos.net")).willReturn(todo);
   }
 
   @Test
   void shouldAllowAccessForAuthenticatedUser() throws Exception {
-    OidcUser user = createOidcUser("info@stratospheric.dev");
+    OidcUser user = createOidcUser("info@hjolystratos.net");
 
     this.mockMvc
       .perform(get("/todo/show/1")

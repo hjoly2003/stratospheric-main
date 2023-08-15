@@ -26,11 +26,11 @@ public class CertificateApp {
     String region = (String) app.getNode().tryGetContext("region");
     Validations.requireNonEmpty(region, "context variable 'region' must not be null");
 
-    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.stratospheric.dev
+    // [N] Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.hjolystratos.net
     String applicationDomain = (String) app.getNode().tryGetContext("applicationDomain");
     Validations.requireNonEmpty(applicationDomain, "context variable 'applicationDomain' must not be null");
 
-    // [N] Refers to the name of the hosted zone within Route53. For our example, that’s stratospheric.dev.
+    // [N] Refers to the name of the hosted zone within Route53. For our example, that’s hjolystratos.net.
     String hostedZoneDomain = (String) app.getNode().tryGetContext("hostedZoneDomain");
     Validations.requireNonEmpty(hostedZoneDomain, "context variable 'hostedZoneDomain' must not be null");
 

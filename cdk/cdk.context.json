@@ -57,8 +57,8 @@
       }
     ]
   },
-  "hosted-zone:account=221875718260:domainName=stratospheric.dev:region=eu-central-1": {
-    "Id": "/hostedzone/Z081807328Y7TTKJ4NKFU",
-    "Name": "stratospheric.dev."
+  "hosted-zone:account=254857894179:domainName=hjolystratos.net:region=us-east-1": {
+    "Id": "/hostedzone/Z1025119242OLBLX6YAYD",
+    "Name": "hjolystratos.net."
   }
 }

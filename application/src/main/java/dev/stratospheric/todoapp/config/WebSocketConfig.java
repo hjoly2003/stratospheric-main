@@ -1,13 +1,5 @@
 package dev.stratospheric.todoapp.config;
 
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import io.netty.resolver.DefaultAddressResolverGroup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -19,52 +11,60 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-  private final Endpoint websocketEndpoint;
-  private final String websocketUsername;
-  private final String websocketPassword;
-  private final boolean websocketUseSsl;
+  private final Endpoint messageBrokerEndpoint;
+  private final String messageBrokerUser;
+  private final String messageBrokerPassword;
+  private final boolean messageBrokerUseSsl;
 
   public WebSocketConfig(
-    @Value("${custom.web-socket-relay-endpoint:#{null}}") String websocketRelayEndpoint,
-    @Value("${custom.web-socket-relay-username:#{null}}") String websocketUsername,
-    @Value("${custom.web-socket-relay-password:#{null}}") String websocketPassword,
-    @Value("${custom.web-socket-relay-use-ssl:#{false}}") boolean websocketUseSsl
+    @Value("${spring.activemq.broker-url}") String websocketRelayEndpoint,
+    @Value("${spring.activemq.user}") String messageBrokerUser,
+    @Value("${spring.activemq.password}") String messageBrokerPassword,
+    @Value("${custom.web-socket-relay-use-ssl:#{false}}") boolean messageBrokerUseSsl
   ) {
-    this.websocketEndpoint = Endpoint.fromEndpointString(websocketRelayEndpoint);
-    this.websocketUsername = websocketUsername;
-    this.websocketPassword = websocketPassword;
-    this.websocketUseSsl = websocketUseSsl;
+    this.messageBrokerEndpoint = Endpoint.fromEndpointString(websocketRelayEndpoint);
+    this.messageBrokerUser = messageBrokerUser;
+    this.messageBrokerPassword = messageBrokerPassword;
+    this.messageBrokerUseSsl = messageBrokerUseSsl;
   }
 
   @Override
   public void configureMessageBroker(@NonNull MessageBrokerRegistry registry) {
-    ReactorNettyTcpClient<byte[]> customTcpClient = this.websocketUseSsl ?
+    ReactorNettyTcpClient<byte[]> customTcpClient = this.messageBrokerUseSsl ?
       getCustomTcpClientWithSSLSupport() : getCustomTcpClientWithoutSSLSupport();
 
     registry
       .enableStompBrokerRelay("/topic")
       .setAutoStartup(true)
-      .setClientLogin(this.websocketUsername)
-      .setClientPasscode(this.websocketPassword)
-      .setSystemLogin(this.websocketUsername)
-      .setSystemPasscode(this.websocketPassword)
+      .setClientLogin(this.messageBrokerUser)
+      .setClientPasscode(this.messageBrokerPassword)
+      .setSystemLogin(this.messageBrokerUser)
+      .setSystemPasscode(this.messageBrokerPassword)
       .setTcpClient(customTcpClient);
   }
 
   private ReactorNettyTcpClient<byte[]> getCustomTcpClientWithoutSSLSupport() {
     return new ReactorNettyTcpClient<>(configurer -> configurer
-      .host(this.websocketEndpoint.host)
-      .port(this.websocketEndpoint.port), new StompReactorNettyCodec());
+      .host(this.messageBrokerEndpoint.host)
+      .port(this.messageBrokerEndpoint.port), new StompReactorNettyCodec());
   }
 
   private ReactorNettyTcpClient<byte[]> getCustomTcpClientWithSSLSupport() {
     return new ReactorNettyTcpClient<>(configurer -> configurer
-      .host(this.websocketEndpoint.host)
-      .port(this.websocketEndpoint.port)
+      .host(this.messageBrokerEndpoint.host)
+      .port(this.messageBrokerEndpoint.port)
       .resolver(DefaultAddressResolverGroup.INSTANCE)
       .secure(), new StompReactorNettyCodec());
   }

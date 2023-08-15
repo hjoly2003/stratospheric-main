@@ -59,7 +59,19 @@ Public IP: 13.55.30.162
 You can access your service at http://13.55.30.162:8080
 ```
 
-get to the url of the mentionned service.
+get to the url of the mentionned service. Note that the public IP can be found from the AWS Console:
+
+1. Go to the *CloudFormation Stacks* and select the `stratospheric-basic-network` service.
+2. In the `stratospheric-basic-network` page, get to the *Resources* tab.
+3. In that page, click the *Physical ID* of the *ECSCluster* named something like `stratospheric-basic-network-ECSCluster-bDAi5JNxnhwK`.
+4. Within the *Amazon Elastic Container Service Cluster* page of `stratospheric-basic-network-ECSCluster-bDAi5JNxnhwK`, click the *Tasks* tab.
+5. Within that tab, click the link of the only task which is running. The link is named something like `4b506f05ab6645cf9e607b2a9683fedc`.
+6. Within the `4b506f05ab6645cf9e607b2a9683fedc` task *Configuration* page, in the *Configuration* section, you should see the *Public IP* that we're looking for.
+
+Another way (verified) to get the public URL: under the Elastic Container Service in the AWS Console
+(*Networking* tab -> "Clusters > YOUR_CLUSTER > Services >
+YOUR_SERVICE" -> "DNS names")
+
 When done...
 
 ```bash

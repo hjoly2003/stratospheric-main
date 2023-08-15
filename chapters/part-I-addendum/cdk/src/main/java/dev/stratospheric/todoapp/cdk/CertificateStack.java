@@ -26,7 +26,7 @@ public class CertificateStack extends Stack {
    * @param awsEnvironment
    * @param applicationEnvironment
    * @param applicationDomain Specifies the domain name for which we want to create the SSL certificate.  This will be the domain our users will access our application by later on, for example, app.hjolystratos.net
-   * @param hostedZoneDomain Refers to the name of the hosted zone within Route53. For our example, that’s stratospheric.dev.
+   * @param hostedZoneDomain Refers to the name of the hosted zone within Route53. For our example, that’s hjolystratos.net.
    */
   public CertificateStack(
     final Construct scope,

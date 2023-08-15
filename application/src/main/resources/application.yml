@@ -4,7 +4,6 @@ server:
 spring:
   jpa:
     hibernate:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: validate
     open-in-view: false
   application:
@@ -18,12 +17,16 @@ spring:
         enabled: false
 
 management:
-  metrics:
-    export:
-      cloudwatch:
+  health:
+    jms:
+      enabled: false # don't verify the health of the JMS broker
+  cloudwatch:
+    metrics:
+      export:
         enabled: true
         namespace: stratospheric
         step: 1m
+  metrics:
     tags:
       environment: ${ENVIRONMENT_NAME}
 
@@ -35,7 +38,7 @@ error:
 custom:
   invitation-codes: DUKE, HELLO_WORLD, STRATOSPHERIC # TODO: outsource them -> e.g. env variable or database
   sharing-queue: stratospheric-todo-sharing
-  external-url: https://app.stratospheric.dev
+  external-url: https://app.hjolystratos.net
   auto-confirm-collaborations: false
-  confirm-email-from-address: noreply@stratospheric.dev
+  confirm-email-from-address: noreply@hjolystratos.net
   environment: ${ENVIRONMENT_NAME}

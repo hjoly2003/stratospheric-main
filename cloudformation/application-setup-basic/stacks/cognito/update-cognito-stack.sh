@@ -7,7 +7,7 @@ aws cloudformation update-stack \
   --capabilities CAPABILITY_IAM \
   --parameters \
     ParameterKey=ApplicationName,ParameterValue=stratospheric-users \
-    ParameterKey=ApplicationUrl,ParameterValue=https://app.stratospheric.dev \
+    ParameterKey=ApplicationUrl,ParameterValue=https://app.hjolystratos.net \
     ParameterKey=LoginPageDomainPrefix,ParameterValue=dev101
 
 # Sadly, the AWS CLI returns an error when no update is to be performed. But we want to
