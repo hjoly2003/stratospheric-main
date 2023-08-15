@@ -1,12 +1,16 @@
 {
   "context": {
     "applicationName": "todo-app",
-    "region": "eu-central-1",
-    "accountId": "221875718260",
+    "region": "us-east-1",
+    "accountId": "254857894179",
     "environmentName": "staging",
     "springProfile": "aws",
+
+    "comment": "Elastic Container Registry (ECR) connection parameters.",
     "dockerRepositoryName": "todo-app",
     "dockerImageTag": "1",
-    "sslCertificateArn": "arn:aws:acm:eu-central-1:221875718260:certificate/8d92169c-ea74-4086-b407-b951429ac2b1"
-  }
+    
+    "comment2": "[N]:part-I-addendum]:cert",
+    "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a"
+   }
 }

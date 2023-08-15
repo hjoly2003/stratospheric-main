@@ -103,6 +103,7 @@ public class ServiceApp {
               "cognito-idp:AdminCreateUser"
             ))
             .build(),
+          // [N]:sqs - The following gives our application the necessary permissions to send, receive, and delete messages for any Amazon SQS queue as we’ve used the * wildcard.
           PolicyStatement.Builder.create()
             .sid("AllowSQSAccess")
             .effect(Effect.ALLOW)
@@ -124,7 +125,7 @@ public class ServiceApp {
             .sid("AllowSendingEmails")
             .effect(Effect.ALLOW)
             .resources(
-              List.of(String.format("arn:aws:ses:%s:%s:identity/stratospheric.dev", region, accountId))
+              List.of(String.format("arn:aws:ses:%s:%s:identity/hjolystratos.net", region, accountId))
             )
             .actions(List.of(
               "ses:SendEmail",

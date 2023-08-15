@@ -22,7 +22,7 @@ Resources:
     Properties:
       Name: !Ref 'DBUsername'
       GenerateSecretString:
-        # This will generate a JSON object with the keys "username" and "password". The resulting JSON structure will contain a "username" & a "password".
+        # [N] This will generate a JSON object with the keys "username" and "password". The resulting JSON structure will contain a "username" & a "password".
         SecretStringTemplate: !Join ['', ['{"username": "', !Ref 'DBUsername' ,'"}']]
         # [N]:rds]:security - The "password" argument defines that the generated password be added to the resulting JSON structure in the password field.
         GenerateStringKey: "password"

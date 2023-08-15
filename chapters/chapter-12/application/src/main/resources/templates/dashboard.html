@@ -53,10 +53,12 @@
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               <i class="fas fa-share"></i>
             </a>
+            <!-- [N]:share - A drop-down to allow users to add collaborators. It holds a list of all available collaborators to share their tasks with. -->
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <span class="dropdown-item" th:if="${collaborators.isEmpty()}">
                   No collaborator available
                 </span>
+              <!-- [N]:share - The ${collaborators} attribute is populated as part of the Spring MVC controller endpoint for the dashboard view  -->
               <form th:method="POST"
                     th:each="collaborator : ${collaborators}"
                     th:action="@{/todo/{todoId}/collaborations/{collaboratorId}(todoId=${todo.id}, collaboratorId=${collaborator.id})}">

@@ -15,7 +15,7 @@ services:
       - 4566:4566
     environment:
       - SERVICES=sqs,ses,dynamodb
-      - DEFAULT_REGION=eu-central-1
+      - DEFAULT_REGION=us-east-1
       - USE_SINGLE_REGION=true
     volumes:
       - ./src/test/resources/localstack/local-aws-infrastructure.sh:/docker-entrypoint-initaws.d/init.sh

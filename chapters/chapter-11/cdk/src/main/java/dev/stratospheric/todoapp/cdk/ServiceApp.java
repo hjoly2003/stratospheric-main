@@ -72,7 +72,7 @@ public class ServiceApp {
       .env(awsEnvironment)
       .build());
 
-    // [N]:jpa - We load the database output parameters (SPRING_DATASOURCE_{URL|USERNAME|PASSWORD}) to make them available to Spring Boot. 
+    // [N]:jpa - We load the database output parameters (SPRING_DATASOURCE_{URL|USERNAME|PASSWORD}) to make them available to Spring Boot. This will enable the application to access the database.
     PostgresDatabase.DatabaseOutputParameters databaseOutputParameters =
       PostgresDatabase.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
@@ -87,12 +87,15 @@ public class ServiceApp {
         environmentVariables(
           serviceStack,
           databaseOutputParameters,
-          springProfile))
+          springProfile
+        )
+      )
         // [N]:security - Ensures that users are always routed to the same service instance they were assigned to on their first request. Otherwize, having many instances of the application running in parallel exposes us to the risk of a session validation failure  or user authentication failure as these are node dependent (see "Shortcomings when Scaling Out" from Stratospheric chapter 10).
         .withStickySessionsEnabled(true)
         .withHealthCheckIntervalSeconds(30), // needs to be long enough to allow for slow start up with low-end computing instances
 
-      Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName()));
+      Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName())
+    );
 
     app.synth();
   }
@@ -127,10 +130,8 @@ public class ServiceApp {
         databaseOutputParameters.getDbName()));
 
     // [N]:jpa - We load the username and password from the Secret we created in the database stack.
-    vars.put("SPRING_DATASOURCE_USERNAME",
-      databaseSecret.secretValueFromJson("username").toString());
-    vars.put("SPRING_DATASOURCE_PASSWORD",
-      databaseSecret.secretValueFromJson("password").toString());
+    vars.put("SPRING_DATASOURCE_USERNAME", databaseSecret.secretValueFromJson("username").toString());
+    vars.put("SPRING_DATASOURCE_PASSWORD", databaseSecret.secretValueFromJson("password").toString());
 
     return vars;
   }

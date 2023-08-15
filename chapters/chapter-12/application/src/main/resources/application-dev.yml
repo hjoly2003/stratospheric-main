@@ -3,7 +3,7 @@ spring:
     aws:
       endpoint: http://localhost:4566
       region:
-        static: eu-central-1
+        static: us-east-1
       credentials:
         access-key: foo
         secret-key: bar

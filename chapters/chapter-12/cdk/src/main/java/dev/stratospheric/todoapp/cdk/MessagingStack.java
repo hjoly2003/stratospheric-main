@@ -11,6 +11,9 @@ import software.amazon.awscdk.services.sqs.Queue;
 import software.amazon.awscdk.services.ssm.StringParameter;
 import software.constructs.Construct;
 
+/**
+ * [N]:sqs - Creates both the Amazon SQS processing and dead-letter queues (dlq).
+ */
 class MessagingStack extends Stack {
 
   private final ApplicationEnvironment applicationEnvironment;
@@ -35,8 +38,10 @@ class MessagingStack extends Stack {
 
     this.todoSharingQueue = Queue.Builder.create(this, "todoSharingQueue")
       .queueName(applicationEnvironment.prefix("todo-sharing-queue"))
+      // [N] Sets the visibilityTimeout to 30 seconds, which should give our Spring Boot application plenty of time to store the collaboration request in the database and send an email.
       .visibilityTimeout(Duration.seconds(30))
       .retentionPeriod(Duration.days(14))
+      // [N] We connect the main processing queue with the dead-letter queue by passing the field todoSharingDlq to the DeadLetterQueue builder. 
       .deadLetterQueue(DeadLetterQueue.builder()
         .queue(todoSharingDlq)
         .maxReceiveCount(3)
@@ -50,6 +55,10 @@ class MessagingStack extends Stack {
 
   private static final String PARAMETER_TODO_SHARING_QUEUE_NAME = "todoSharingQueueName";
 
+  /**
+   * [N] Exposes the name of the SQS queue our application will connect to.<p/>
+   * [N] Stores the name of the queue in the SSM parameter store so we can later use it to configure our Spring Boot application. Later on, we can create an AWS CloudWatch alarm to get notified as soon as the first message arrives in this queue.
+   */
   private void createOutputParameters() {
 
     StringParameter.Builder.create(this, "todoSharingQueueName")

@@ -25,7 +25,7 @@ aws cloudformation create-stack \
       ParameterKey=NetworkStackName,ParameterValue=stratospheric-basic-network \
       ParameterKey=ServiceName,ParameterValue=stratospheric-todo-app \
       ParameterKey=ServiceStackImageUrl,ParameterValue=$DOCKER_IMAGE_URL \
-      ParameterKey=DatabaseStackTemplateUrl,ParameterValue=https://s3.amazonaws.com/stratospheric.dev/stacks/application/database.yml \
+      ParameterKey=DatabaseStackTemplateUrl,ParameterValue=https://s3.amazonaws.com/hjolystratos.net/stacks/application/database.yml \
       ParameterKey=DatabaseStackDBUsername,ParameterValue=stratospheric \
       ParameterKey=DatabaseStackDBName,ParameterValue=stratospheric
 

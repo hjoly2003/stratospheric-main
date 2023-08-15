@@ -340,7 +340,7 @@
     "emailVerified" : true,
     "firstName" : "Bjoern",
     "lastName" : "Wilmsmann",
-    "email" : "bjoern@stratospheric.dev",
+    "email" : "bjoern@hjolystratos.net",
     "credentials" : [ {
       "id" : "324b6c69-0216-4ec0-b876-e156c9bea4ef",
       "type" : "password",
@@ -365,7 +365,7 @@
     "emailVerified" : true,
     "firstName" : "Duke",
     "lastName" : "Java",
-    "email" : "info@stratospheric.dev",
+    "email" : "info@hjolystratos.net",
     "credentials" : [ {
       "id" : "3dbb1057-ee81-4cf3-8f1d-ad0f108b0741",
       "type" : "password",
@@ -390,7 +390,7 @@
     "emailVerified" : true,
     "firstName" : "Philip",
     "lastName" : "Riecks",
-    "email" : "philip@stratospheric.dev",
+    "email" : "philip@hjolystratos.net",
     "credentials" : [ {
       "id" : "4cc2e243-69cf-4045-95bd-cad8f5ce1478",
       "type" : "password",
@@ -415,7 +415,7 @@
     "emailVerified" : true,
     "firstName" : "Tom",
     "lastName" : "Hombergs",
-    "email" : "tom@stratospheric.dev",
+    "email" : "tom@hjolystratos.net",
     "credentials" : [ {
       "id" : "7c824d1a-0e3b-4532-9f6c-1e3911d3f805",
       "type" : "password",
@@ -647,7 +647,6 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "comment": "[?]:keycloak - Do I have to generate it for my local instance?",
     "secret" : "27b07baf-53ba-42c6-b11f-6384769cada3",
     "redirectUris" : [ "http://localhost:*" ],
     "webOrigins" : [ "http://localhost:8080" ],

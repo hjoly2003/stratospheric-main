@@ -2,7 +2,7 @@ spring:
   cloud:
     aws:
       region:
-        static: eu-central-1
+        static: us-east-1
       sns:
         enabled: false
 

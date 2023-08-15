@@ -6,6 +6,9 @@ import software.amazon.awscdk.Environment;
 
 import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
 
+/**
+ * [N]:sqs - A CDK app for the messaging-related parts of our application. 
+ */
 public class MessagingApp {
 
   public static void main(final String[] args) {
