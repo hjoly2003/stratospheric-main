@@ -1,10 +1,9 @@
 package dev.stratospheric.todoapp.collaboration;
 
-
 import dev.stratospheric.todoapp.todo.Priority;
 
 /**
- * [N]:share - The TodoCollaborationNotification object acts as a data transfer object (DTO) and contains the relevant information about the collaboration request.
+ * [N]:share - A  data transfer object (DTO) that contains the relevant information about the collaboration request.
  */
 public class TodoCollaborationNotification {
 
@@ -22,6 +21,14 @@ public class TodoCollaborationNotification {
   public TodoCollaborationNotification() {
   }
 
+  /**
+   * [N] - Initializes the following attributes: <ul>
+   *  <li>collaborator{Email|Name|Id} -    Attributes of the targeted collaborator</li>
+   *  <li>todo{Title|Description|Priority|Id} -    Attributes of the todo</li>
+   *  <li>token -    The random token for each collaboration request that is required for accepting the invite.</li>
+   * </ul>
+   * @param todoCollaborationRequest Contains the attributes to be initialized
+   */
   public TodoCollaborationNotification(TodoCollaborationRequest todoCollaborationRequest) {
     this.collaboratorEmail = todoCollaborationRequest.getCollaborator().getEmail();
     this.collaboratorName = todoCollaborationRequest.getCollaborator().getName();
@@ -99,15 +106,15 @@ public class TodoCollaborationNotification {
 
   @Override
   public String toString() {
-    return "TodoCollaborationNotification{" +
-      "collaboratorEmail='" + collaboratorEmail + '\'' +
-      ", collaboratorName='" + collaboratorName + '\'' +
-      ", collaboratorId=" + collaboratorId +
-      ", todoTitle='" + todoTitle + '\'' +
-      ", todoDescription='" + todoDescription + '\'' +
-      ", todoPriority=" + todoPriority +
-      ", todoId=" + todoId +
-      ", token='" + token + '\'' +
-      '}';
+    return "{" +
+      "\"collaboratorEmail\": \"" + collaboratorEmail + "\"," +
+      "\"collaboratorName\": \"" + collaboratorName + "\"," +
+      "\"collaboratorId\": " + collaboratorId + "," +
+      "\"todoTitle\": \"" + todoTitle + "\"," +
+      "\"todoDescription\": \"" + todoDescription + "\"," +
+      "\"todoPriority\": \"" + todoPriority + "\"," +
+      "\"todoId\": " + todoId + "," +
+      "\"token\": \"" + token + "\"" +
+      "}";
   }
 }

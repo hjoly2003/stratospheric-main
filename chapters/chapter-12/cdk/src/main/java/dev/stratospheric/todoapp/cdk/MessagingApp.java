@@ -7,7 +7,8 @@ import software.amazon.awscdk.Environment;
 import static dev.stratospheric.todoapp.cdk.Validations.requireNonEmpty;
 
 /**
- * [N]:sqs - A CDK app for the messaging-related parts of our application. 
+ * [N]:sqs - A CDK app for the messaging-related parts of our application.<p/>
+ * We won’t find any CloudFormation resources or CDK constructs to create the Amazon SES instance for a given region as it’s already available.
  */
 public class MessagingApp {
 

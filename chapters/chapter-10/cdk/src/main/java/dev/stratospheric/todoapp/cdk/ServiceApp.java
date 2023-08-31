@@ -84,7 +84,7 @@ public class ServiceApp {
         environmentVariables(
           springProfile, 
           cognitoOutputParameters))
-        // [N]:security]:cognito - The Service construct of our cdk-constructs library takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
+        // [N]:security - The Service construct of our cdk-constructs library takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
         .withTaskRolePolicyStatements(List.of(
           // [N]:cognito - The following policy allows all operations (like creating a user) on cognito-idp (IdP: identity Provider)
           PolicyStatement.Builder.create()

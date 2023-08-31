@@ -99,6 +99,7 @@ public class SampleCloudWatchDashboard extends Construct {
       .build());
   }
 
+  // [N] record is a jdk14 feature for encupsulating final data (see https://www.baeldung.com/java-record-keyword)
   record InputParameter(
     String cognitoUserPoolClientId,
     String cognitoUserPoolId

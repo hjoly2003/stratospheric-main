@@ -13,7 +13,9 @@ spring:
         provider:
           cognito:
             issuerUri: ${COGNITO_PROVIDER_URL}
+  # [N]:mq]:websocket
   activemq:
+    # [N]:websocket]:relay
     broker-url: ${WEB_SOCKET_RELAY_ENDPOINT}
     user: ${WEB_SOCKET_RELAY_USERNAME}
     password: ${WEB_SOCKET_RELAY_PASSWORD}
@@ -25,7 +27,11 @@ management:
         enabled: false # disabled to save some $$$ on our monthly AWS bill
 
 custom:
+  # [N]:sqs
   sharing-queue: ${TODO_SHARING_QUEUE_NAME}
+
+  # [N]:mq]:websocket]:relay
   web-socket-relay-use-ssl: true
+
   provide-test-todo-controller: false
   use-cognito-as-identity-provider: true

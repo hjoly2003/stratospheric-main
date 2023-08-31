@@ -29,6 +29,7 @@ public class NetworkApp {
     requireNonEmpty(region, "context variable 'region' must not be null");
 
     String sslCertificateArn = (String) app.getNode().tryGetContext("sslCertificateArn");
+    requireNonEmpty(sslCertificateArn, "context variable 'sslCertificateArn' must not be null");
 
     Environment awsEnvironment = makeEnv(accountId, region);
 
@@ -60,5 +61,4 @@ public class NetworkApp {
       .region(region)
       .build();
   }
-
 }

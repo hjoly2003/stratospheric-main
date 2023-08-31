@@ -1,6 +1,7 @@
 package dev.stratospheric.todoapp.cdk;
 
 import dev.stratospheric.cdk.Network;
+import dev.stratospheric.cdk.Network.NetworkInputParameters;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;
@@ -28,16 +29,23 @@ public class NetworkApp {
     Environment awsEnvironment = makeEnv(accountId, region);
 
     Stack networkStack = new Stack(app, "NetworkStack", StackProps.builder()
+      // We use the environmentName in the stackName() method to prefix the name of the stack. This separates the stack and the other resources from those deployed in another environment.
       .stackName(environmentName + "-Network")
       .env(awsEnvironment)
       .build());
+
+    NetworkInputParameters inputParameters = new NetworkInputParameters();
+
+    if(sslCertificateArn != null && !sslCertificateArn.isEmpty()){
+      inputParameters.withSslCertificateArn(sslCertificateArn);
+    }
 
     Network network = new Network(
       networkStack,
       "Network",
       awsEnvironment,
       environmentName,
-      new Network.NetworkInputParameters(sslCertificateArn));
+      inputParameters);
 
     app.synth();
   }

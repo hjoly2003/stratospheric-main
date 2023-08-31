@@ -4,6 +4,9 @@ import dev.stratospheric.cdk.ApplicationEnvironment;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 
+/**
+ * [N]:mq
+ */
 public class ActiveMqApp {
 
   public static void main(final String[] args) {

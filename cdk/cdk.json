@@ -3,19 +3,39 @@
     "applicationName": "todo-app",
     "region": "us-east-1",
     "accountId": "254857894179",
+    
+    "comment": "[N]: Specifies the source of the Docker image that we want to deploy.",
     "dockerRepositoryName": "todo-app",
     "dockerImageTag": "DYNAMICALLY_OVERRIDDEN_BY_WORKFLOW",
+
     "applicationUrl": "https://app.hjolystratos.net",
+    
+    "comment1": "[?]:usr-signup]:security - [loginPageDomainPrefix: staging-hjolystratos] The prefix of the user pool web UI for users to log in. The complete URL is https://<loginPageDomainPrefix>.auth.<region>.amazoncognito.com",
     "loginPageDomainPrefix": "stratospheric-staging",
+
     "environmentName": "staging",
     "springProfile": "aws",
+
+    "comment2": "[N]:mq - The name of the ActiveMQ root user that should gain access to our ActiveMQ instance.",
     "activeMqUsername": "activemqUser",
-    "canaryUsername": "canary",
-    "canaryUserPassword": "SECRET_OVERRIDDEN_BY_WORKFLOW",
-    "confirmationEmail": "info@hjolystratos.net",
+
+    "comment3": "[N]: (Optional) If you plan to deploy the Canary stack, add the name of the user to log in. You first have to create this user manually via the sample application, e.g., canary.",
+    "canaryUsername": "stratos.hjoly2",
+    "canaryUserPassword": "H0r1z0nS@r@h",
+
+    "comment4": "[N]: (Optional) The email for receiving CloudWatch alerts.",
+    "confirmationEmail": "huguesjoly73@gmail.com",
+
+    "comment5": "[N]:part-I-addendum]:domain - The domain of your application, without protocol",
     "applicationDomain": "app.hjolystratos.net",
+    
+    "comment6": "[N]:part-I-addendum]:cert - The arn for the SSL certificate for your custom domain.",
     "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a",
+
+    "comment7": "[N]:part-I-addendum]:a_record - The domain name for the hosted zone within Route53.",
     "hostedZoneDomain": "hjolystratos.net",
+
+    "comment8": "[N]: (Optional) If you plan to deploy the deployment sequencer, add the access token for GitHub to trigger GitHub Action workflow, e.g. s3cr3t.",
     "githubToken": "SECRET_OVERRIDDEN_BY_WORKFLOW"
   }
 }

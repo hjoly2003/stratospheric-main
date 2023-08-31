@@ -2,6 +2,7 @@
 .project
 .settings/
 .idea
+**/.vscode/**
 target
 *.iml
 
@@ -16,8 +17,9 @@ update_error
 HELP.md
 .gradle
 build/
+!gradle/wrapper/gradle-wrapper.jar
 **/bin/**
-.history/**
+**/.history/**
 **/gradle/**
 !**/src/main/**
 !**/src/test/**
@@ -26,6 +28,7 @@ build/
 /gradlew.bat
 
 **/cdk.out/
+**/cdk.out2/
 **/node_modules/
 
 # Custom CDK context files

@@ -4,6 +4,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttri
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
+/** 
+ * [N]:nsql]:web-trace - Model class used to store data from our Java application into our DynamoDB table.<p/>
+ * The {@code @DynamoDbBean} annotation from the DynamoDB SDK marks a class as a representation of a DynamoDB table.
+ */
 @DynamoDbBean
 public class Breadcrumb {
 
@@ -12,6 +16,10 @@ public class Breadcrumb {
   private String username;
   private String timestamp;
 
+  /**
+   * The {@code @DynamoDbPartitionKey} annotation denotes the id attribute to be used as the table’s primary key.
+   * @return
+   */
   @DynamoDbPartitionKey
   public String getId() {
     return id;
@@ -21,6 +29,7 @@ public class Breadcrumb {
     this.id = id;
   }
 
+  // [N] The {@code @DynamoDbAttribute} annotation designates the attributes in the mapped Dynamo DB. 
   @DynamoDbAttribute(value = "uri")
   public String getUri() {
     return uri;
@@ -30,6 +39,10 @@ public class Breadcrumb {
     this.uri = uri;
   }
 
+  /**
+   * The {@code username} partition key allows us to query for a list of all {@code Breadcrumb} items for a specific user as well as a list of events for a user within a specific time frame.
+   * @return
+   */
   @DynamoDbAttribute(value = "username")
   public String getUsername() {
     return username;
@@ -39,6 +52,10 @@ public class Breadcrumb {
     this.username = username;
   }
 
+  /**
+   * The {@code timestamp} is a sort key which allows to aggregate data by a partition key
+   * @return
+   */
   @DynamoDbAttribute(value = "timestamp")
   public String getTimestamp() {
     return timestamp;

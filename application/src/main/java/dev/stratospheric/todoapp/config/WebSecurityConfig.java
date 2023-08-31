@@ -31,10 +31,12 @@ public class WebSecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
       // Enables CSRF protection (to prevent a Cross-Site-Request-Forgery attack).
-      .csrf(csrf -> csrf.ignoringRequestMatchers(
-        "/stratospheric-todo-updates/**",
-        "/websocket/**"
-      ))
+      .csrf(
+        csrf -> csrf.ignoringRequestMatchers(
+          // [N]:websocket]:relay - Ensures that WebSocket connections to our relay don’t require the user of our sample Todo application to sign in first.
+          "/stratospheric-todo-updates/**",
+          "/websocket/**")
+      )
       // Configures the authentication support for OIDC. With oauth2Login, Spring Security refers to either OAuth 2.0 and/or OpenID Connect 1.0 authentication. 
       .oauth2Login(withDefaults())
 

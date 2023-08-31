@@ -336,6 +336,7 @@ public class OperationalCloudWatchDashboard extends Construct {
       .build());
   }
 
+  // [N] record is a jdk14 feature for encupsulating final data (see https://www.baeldung.com/java-record-keyword)
   public record InputParameter(String rdsDatabaseIdentifier, String beanstalkLoadBalancerId) {
   }
 }

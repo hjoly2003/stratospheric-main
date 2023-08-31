@@ -2,18 +2,20 @@ package dev.stratospheric.todoapp.todo;
 
 import dev.stratospheric.todoapp.collaboration.TodoCollaborationRequest;
 import dev.stratospheric.todoapp.person.Person;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * [N]:jpa
+ */
 @Entity
 public class Todo {
 
@@ -54,6 +56,10 @@ public class Todo {
   @JoinColumn(name = "todo_id")
   private List<TodoCollaborationRequest> collaborationRequests = new ArrayList<>();
 
+  /**
+   * [N]:share - A many-to-many relationship as a todo can have multiple collaborators, and one person can
+collaborate on numerous todos.
+   */
   @ManyToMany
   @JoinTable(name = "todo_collaboration",
     joinColumns = @JoinColumn(name = "todo_id"),

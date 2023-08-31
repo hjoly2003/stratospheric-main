@@ -18,10 +18,18 @@ class CustomConfigurationProperties {
   private String sharingQueue;
 
   @NotNull
-  private Boolean autoConfirmCollaborations;
+  private boolean autoConfirmCollaborations;
 
   @NotNull
-  private Boolean useCognitoAsIdentityProvider;
+  private boolean useCognitoAsIdentityProvider;
+
+  public Set<String> getInvitationCodes() {
+    return invitationCodes;
+  }
+
+  public void setInvitationCodes(Set<String> invitationCodes) {
+    this.invitationCodes = invitationCodes;
+  }
 
   public String getSharingQueue() {
     return sharingQueue;
@@ -45,14 +53,6 @@ class CustomConfigurationProperties {
 
   public void setUseCognitoAsIdentityProvider(Boolean useCognitoAsIdentityProvider) {
     this.useCognitoAsIdentityProvider = useCognitoAsIdentityProvider;
-  }
-
-  public Set<String> getInvitationCodes() {
-    return invitationCodes;
-  }
-
-  public void setInvitationCodes(Set<String> invitationCodes) {
-    this.invitationCodes = invitationCodes;
   }
 
 }

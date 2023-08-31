@@ -10,6 +10,7 @@ services:
       - POSTGRES_USER=stratospheric
       - POSTGRES_PASSWORD=stratospheric
       - POSTGRES_DB=stratospheric
+  # [N]:mq]:local - We’ll only use port 61613 for connecting to the local ActiveMQ instance through WebSocket.
   activemq:
     image: stratospheric/activemq-docker-image
     ports:
@@ -24,6 +25,7 @@ services:
     ports:
       - 4566:4566
     environment:
+      # [N]:local]:sqs]:ses]:nosql
       - SERVICES=sqs,ses,dynamodb
       - DEFAULT_REGION=us-east-1
       - USE_SINGLE_REGION=true
@@ -41,5 +43,5 @@ services:
       - DB_VENDOR=h2
       - JAVA_OPTS=-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/stratospheric-realm.json
     volumes:
-      # [N] The stratospheric-realm.json file that we are mapping to inside of the Docker container contains the configuration for Keycloak. To avoid any manual setup steps (define users, configure the realm, etc.), we import this config during Keycloak startup. This config pre-populates three users and registers our Todo application as a known client. 
+      # [N] The stratospheric-realm.json file that we are mapping to inside of the Docker container contains the configuration for Keycloak. To avoid any manual setup steps (define users, configure the realm, etc.), we import this config during Keycloak startup. This config pre-populates three users and registers our Todo application as a known client.
       - ./src/test/resources/keycloak/stratospheric-realm.json:/tmp/stratospheric-realm.json

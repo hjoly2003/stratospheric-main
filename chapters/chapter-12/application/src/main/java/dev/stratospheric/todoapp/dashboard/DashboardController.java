@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ *  [N]:share - Sets the content of the ${collaborators} attribute.
+ */
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {

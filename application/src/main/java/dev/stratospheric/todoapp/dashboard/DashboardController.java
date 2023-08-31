@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ *  [N]:share - Sets the content of the ${collaborators} attribute.
+ */
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
@@ -25,6 +28,7 @@ public class DashboardController {
     model.addAttribute("collaborators", List.of());
 
     if (user != null) {
+      // [N]:share - Sets the content of the ${collaborators} attribute.
       model.addAttribute("collaborators", dashboardService.getAvailableCollaborators(user.getEmail()));
       model.addAttribute("todos", dashboardService.getAllOwnedAndSharedTodos(user.getEmail()));
     }

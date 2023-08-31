@@ -10,7 +10,7 @@
     "dockerRepositoryName": "todo-app",
     "dockerImageTag": "1",
     
-    "comment2": "[N]:part-I-addendum]:cert",
+    "comment2": "[N]:part-I-addendum]:cert - The arn for the SSL certificate for your custom domain.",
     "sslCertificateArn": "arn:aws:acm:us-east-1:254857894179:certificate/782c9978-2721-4730-a1b4-aed2a635b88a"
    }
 }

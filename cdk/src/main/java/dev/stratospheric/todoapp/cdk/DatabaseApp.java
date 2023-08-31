@@ -47,8 +47,8 @@ public class DatabaseApp {
       "Database",
       awsEnvironment,
       applicationEnvironment,
-      // [N] If we wanted to make any of the parameters in DatabaseInputParameters configurable, we could pass them into the app and then into the DatabaseInputParameters from there.
-      new PostgresDatabase.DatabaseInputParameters());
+      // [N] Requires to explicitly pass the postgres version to avoid the "Cannot find version 12.9 for postgres" message.
+      new PostgresDatabase.DatabaseInputParameters().withPostgresVersion("12.15"));
 
     app.synth();
   }

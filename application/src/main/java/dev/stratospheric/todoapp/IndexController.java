@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 
 /**
- * [N]:thymeleaf - A public endpoint that exposes a Thymeleaf view.<p>
- * This Spring MVC {@code @Controller } resolves the index view located inside {@code src/main/resources/templates}.
+ * [N]:thymeleaf - A public endpoint that exposes a Thymeleaf view.<p/>
+ * This Spring MVC {@code @Controller } resolves the index view located inside {@code src/main/resources/templates}.<p/>
  */
 @Controller
 public class IndexController {
@@ -23,6 +23,7 @@ public class IndexController {
 
   /**
    * After a successful login, the user is redirected to this endpoint and Spring Security creates a Principal in the form of an OidcUser that we inject to the call. 
+  * [N]:spring-evnt - Emits, via the Spring's {@code ApplicationEventPublisher}, a new {@code TracingEvent} each time a user visits the index page.
    * @param principal
    * @return
    */

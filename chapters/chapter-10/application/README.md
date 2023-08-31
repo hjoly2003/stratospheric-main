@@ -1,5 +1,13 @@
 # Stratospheric - Chapter 9-10: Local Development, Building User Registration and Login with AWS Cognito
 
+## Status
+
+From this chapter and in chapter 12, there is a bug that hinder the login process (both in local and AWS deployment):
+
+1. When submitting the login form, you'll fall into a blank page with an http 999 error code.
+2. Click the back button from your browser to get to the previous page. You'll get to a page titled "Login with OAuth 2.0 [authorization_request_not_found]".
+3. In that page, click the bottom link to complete the login process and get to the targetted "index" page.
+
 ## Summary
 
 ### Chapter 9
@@ -48,13 +56,15 @@ Start Docker.
 Build and deploy the application
 
 ```bash
-cd stratospheric-main/application
+cd chapter-9/application
 gradle build     # Can take a while (2m 26s)
 docker-compose up
 gradle bootRun
 ```
 
 Open your browser to `http://localhost:8080/`.
+
+To register a new user, type in the new "Username" and your "Email address" and use "DUKE" for the "Invitation code". You'll receive an email containing your temporary password that you'll use to login to the application.
 
 We can still log in to the Todo application by using one of the pre-defined users:
 
@@ -116,7 +126,7 @@ Don't forget to delete the stacks afterward:
 ```bash
 npm run domain:destroy
 npm run service:destroy
-npm run cognito:destroy # Note that you have to go to the AWS console to delete the User Pool.
+npm run cognito:destroy # [!] Note that, prior to this, you have to go to the AWS console to delete the User Pool.
 npm run network:destroy
 # Can also run everything as a batch job and get notified when done
 npm run domain:destroy; npm run service:destroy; npm run cognito:destroy; npm run network:destroy; Say "complété"

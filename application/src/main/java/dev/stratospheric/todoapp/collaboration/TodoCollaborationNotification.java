@@ -2,6 +2,9 @@ package dev.stratospheric.todoapp.collaboration;
 
 import dev.stratospheric.todoapp.todo.Priority;
 
+/**
+ * [N]:share - A  data transfer object (DTO) that contains the relevant information about the collaboration request.
+ */
 public class TodoCollaborationNotification {
 
   private String collaboratorEmail;
@@ -18,6 +21,14 @@ public class TodoCollaborationNotification {
   public TodoCollaborationNotification() {
   }
 
+  /**
+   * [N] - Initializes the following attributes: <ul>
+   *  <li>collaborator{Email|Name|Id} -    Attributes of the targeted collaborator</li>
+   *  <li>todo{Title|Description|Priority|Id} -    Attributes of the todo</li>
+   *  <li>token -    The random token for each collaboration request that is required for accepting the invite.</li>
+   * </ul>
+   * @param todoCollaborationRequest Contains the attributes to be initialized
+   */
   public TodoCollaborationNotification(TodoCollaborationRequest todoCollaborationRequest) {
     this.collaboratorEmail = todoCollaborationRequest.getCollaborator().getEmail();
     this.collaboratorName = todoCollaborationRequest.getCollaborator().getName();

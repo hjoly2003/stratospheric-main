@@ -39,6 +39,4 @@ spring:
 custom:
   # [N]:local]:cognito - We don't want to connect to the real Cognito.
   use-cognito-as-identity-provider: false
-  # # [?] Required?
-  # environment: local
 

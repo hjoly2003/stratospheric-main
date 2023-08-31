@@ -1,9 +1,8 @@
 package dev.stratospheric.todoapp.dashboard;
 
+import dev.stratospheric.todoapp.todo.Todo;
 
 import java.time.LocalDate;
-
-import dev.stratospheric.todoapp.todo.Todo;
 
 public class TodoDto {
 

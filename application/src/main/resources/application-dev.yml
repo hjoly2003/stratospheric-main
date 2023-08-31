@@ -33,14 +33,15 @@ spring:
     show-sql: true
   cloud:
     aws:
-      # [N]:local]:localstack - We have to override our Java AWS SDK clients to connect to LocalStack. With Spring Cloud AWS, we can conveniently override the endpoint URLs and regions for all AWS SDK clients. 
       # [N]:local]:localstack - When it comes to configuring the AWS credentials for the local setup, LocalStack bypasses any AWS client authentication hence, we hardcode the AWS credentials with any value.
       credentials:
         secret-key: foo
         access-key: bar
+      # [N]:local]:localstack - We have to override our Java AWS SDK clients to connect to LocalStack. With Spring Cloud AWS, we can conveniently override the endpoint URLs and regions for all AWS SDK clients. 
       endpoint: http://localhost:4566
       region:
         static: us-east-1
+  # [N]:mq]:websocket]:local - To have our application to point to the local ActiveMQ instance through WebSocket.
   activemq:
     password: admin
     user: admin
@@ -53,11 +54,14 @@ management:
         enabled: false
 
 custom:
+  # [N]:mq]:websocket]:relay
   web-socket-relay-use-ssl: false
+
   auto-confirm-collaborations: true
   provide-test-todo-controller: true
 
   # [N]:local]:cognito - We don't want to connect to the real Cognito.
   use-cognito-as-identity-provider: false
+
   environment: local
 

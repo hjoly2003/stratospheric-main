@@ -1,6 +1,7 @@
 version: '3.3'
 
 services:
+  # [N]:local]:postgres - For emulating AWS RDS (Relational Database Service). [!] The latest version of LocalStack supports RDS.
   postgres:
     image: postgres:12.9
     ports:
@@ -10,15 +11,18 @@ services:
       - POSTGRES_PASSWORD=stratospheric
       - POSTGRES_DB=stratospheric
   localstack:
-    image: localstack/localstack:0.14.4
+    image: localstack/localstack
     ports:
       - 4566:4566
     environment:
+      # [N]:local]:sqs]:ses
       - SERVICES=sqs,ses,dynamodb
       - DEFAULT_REGION=us-east-1
       - USE_SINGLE_REGION=true
     volumes:
       - ./src/test/resources/localstack/local-aws-infrastructure.sh:/docker-entrypoint-initaws.d/init.sh
+  
+  # [N]:local]:keycloak - For emulating AWS Cognito locally. [!] The latest version of LocalStack supports Cognito.
   keycloak:
     image: quay.io/keycloak/keycloak:18.0.0-legacy
     ports:
@@ -29,4 +33,5 @@ services:
       - DB_VENDOR=h2
       - JAVA_OPTS=-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/tmp/stratospheric-realm.json
     volumes:
+      # [N] The stratospheric-realm.json file that we are mapping to inside of the Docker container contains the configuration for Keycloak. To avoid any manual setup steps (define users, configure the realm, etc.), we import this config during Keycloak startup. This config pre-populates three users and registers our Todo application as a known client. 
       - ./src/test/resources/keycloak/stratospheric-realm.json:/tmp/stratospheric-realm.json

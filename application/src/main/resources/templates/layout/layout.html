@@ -26,12 +26,14 @@
 
   <script th:src="@{/webjars/sockjs-client/sockjs.min.js}" sec:authorize="isAuthenticated()"></script>
   <script th:src="@{/webjars/stomp-websocket/stomp.min.js}" sec:authorize="isAuthenticated()"></script>
+  <!-- [N]:websocket]:stomp]:statefull -->
   <script th:src="@{/js/todo-updates.js}" sec:authorize="isAuthenticated()"></script>
 </head>
 <body>
 <div class="min-vh-100 d-flex flex-column justify-content-between">
   <div th:replace="~{fragments/header :: header}"></div>
 
+  <!-- [N]:websocket]:stomp]:statefull - toast -->
   <div th:replace="~{fragments/toast :: toast}"></div>
 
   <div class="container has-text-centered">
@@ -43,6 +45,7 @@
   <div th:replace="~{fragments/modals :: confirmDeletionModal}"></div>
   <div th:replace="~{fragments/footer :: footer}"></div>
 
+  <!--  [N]:websocket]:stomp]:statefull -->
   <script sec:authorize="isAuthenticated()">
     connectToWebSocketEndpoint('[[${#authentication.principal.attributes.email}]]');
   </script>

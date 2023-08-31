@@ -18,9 +18,9 @@
 
 ```bash
 cd chapter-11/application
-./gradlew build
+gradle build
 docker-compose up
-./gradlew bootRun
+gradle bootRun
 ```
 
 Open your browser to `http://localhost:8080/`.
@@ -33,21 +33,23 @@ To bootstrap our AWS environment
 cdk bootstrap aws://<ACCOUNT_ID>/<REGION>
 ```
 
-We first need to bootstrap the Elastic Container Registry (ECS) so that, later, it will store our application image.
+From this chapter and onward, we won't use an image from DockerHub. Instead, we'll use the Elastic Container Registry (ECR). We first need to bootstrap the ECR so that, later, it will store our application image.
+
 ```bash
 cd chapter-11/cdk
 npm run repository:deploy
 ```
 
-Since we're building the application on an arm64 platform, we need to create a Docker image compatible to the default AWS ECS architecture
+Since we're building on an arm64 platform, we need to create a Docker image of the application on the Elastic Container Registry (ECR) that is compatible to the default AWS ECS architecture (amd64).
 
 First, start docker.
 
 ```bash
 cd chapter-11/application
 gradle build
+# The following requires AWS_REGION and ACCCOUNT_ID to be defined in the shell session.
 aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-# The following requires Docker to be running: it builds the image in x86_64 and push it to DockerHub
+# The following requires Docker to be running: it builds the image in amd64 and push it to the ECR
 docker buildx build --platform=linux/amd64 -t ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/todo-app:1 --push .
 ```
 
@@ -57,11 +59,6 @@ docker buildx build --platform=linux/amd64 -t ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION
 cd chapter-11/cdk
 npm run network:deploy
 npm run database:deploy
-```
-
-Next, we deploy the todo Service, and the custom domain service:
-
-```bash
 npm run service:deploy
 ```
 
@@ -71,7 +68,7 @@ Don't forget to delete the stacks afterward:
 
 ```bash
 npm run service:destroy # Need to destroy manually the stack holding the service parameters via the AWS console.
-npm run database:destroy
+npm run database:destroy # [!] Prior to this we might need to clean up a DB schema from the DB. 
 ...
 13 h 46 min 12 s | DELETE_FAILED        | AWS::RDS::DBSubnetGroup                     | DatabaseStack/Database/dbSubnetGroup
 Cannot delete the subnet group 'staging-todo-app-dbsubnetgroup' because at least one database instance: staging-todo-app-database is still

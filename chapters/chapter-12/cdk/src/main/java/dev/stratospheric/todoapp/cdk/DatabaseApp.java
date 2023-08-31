@@ -43,7 +43,8 @@ public class DatabaseApp {
       "Database",
       awsEnvironment,
       applicationEnvironment,
-      new PostgresDatabase.DatabaseInputParameters());
+      // [N] Requires to explicitly pass the postgres version to avoid the "Cannot find version 12.9 for postgres" message.
+      new PostgresDatabase.DatabaseInputParameters().withPostgresVersion("12.15"));
 
     app.synth();
   }

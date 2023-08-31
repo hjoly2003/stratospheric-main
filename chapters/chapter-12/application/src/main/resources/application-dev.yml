@@ -1,29 +1,38 @@
+# [N]:local - For local development, connecting to local Docker containers, and overriding the AWS clients to point to localhost.
 spring:
-  cloud:
-    aws:
-      endpoint: http://localhost:4566
-      region:
-        static: us-east-1
-      credentials:
-        access-key: foo
-        secret-key: bar
+  # [N]:local]:postgres - For emulating AWS RDS (Relational Database Service). [!] The latest version of LocalStack supports RDS.  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stratospheric
+    username: stratospheric
+    password: stratospheric
+  
+  # [N]:security - Specifies the relevant Spring Security properties 
   security:
     oauth2:
       client:
         registration:
+          # [N]:local - Although Cognito is not used locally, we are still using 'cognito' as the provider key to avoid further complexity in our setup.
           cognito:
             clientId: spring-boot-application
+            # [N] Since we’re always using the same Keycloak configuration we can hardcode the client secret. 
             # [?]:keycloak - Do I have to generate it for my local instance?
             clientSecret: 27b07baf-53ba-42c6-b11f-6384769cada3
             scope: openid
         provider:
           cognito:
             issuerUri: http://localhost:8888/auth/realms/stratospheric
-  datasource:
-    url: jdbc:postgresql://localhost:5432/stratospheric
-    username: stratospheric
-    password: stratospheric
+  cloud:
+    aws:
+      # [N]:local]:localstack - We have to override our Java AWS SDK clients to connect to LocalStack. With Spring Cloud AWS, we can conveniently override the endpoint URLs and regions for all AWS SDK clients. 
+      # [N]:local]:localstack - When it comes to configuring the AWS credentials for the local setup, LocalStack bypasses any AWS client authentication hence, we hardcode the AWS credentials with any value.
+      credentials:
+        access-key: foo
+        secret-key: bar
+      endpoint: http://localhost:4566
+      region:
+        static: us-east-1
 
 custom:
+  # [N] for logging purposes in the dev profile.
   auto-confirm-collaborations: true
   use-cognito-as-identity-provider: false

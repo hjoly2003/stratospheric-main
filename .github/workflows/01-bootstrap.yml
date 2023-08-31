@@ -8,7 +8,6 @@ on:
   workflow_dispatch
 
 # [N]:chap7 - We’re passing in the AWS credentials as environment variables from GitHub’s secrets context. These AWS credentials belong to a technical IAM user with admin-like privileges. This user needs sufficient permissions to create and destroy infrastructure in our AWS account. 
-# [?] How the GitHub secrets' parameters are initialized with AWS account credentials? 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

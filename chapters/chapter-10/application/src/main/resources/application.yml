@@ -12,7 +12,3 @@ spring:
 
 custom:
   invitation-codes: DUKE, STRATOSPHERIC
-
-  # # [?] Required?
-  # external-url: https://app.hjolystratos.net
-  # environment: ${ENVIRONMENT_NAME}

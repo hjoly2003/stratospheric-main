@@ -1,15 +1,20 @@
+server:
+  forward-headers-strategy: framework
+
 spring:
   cloud:
     aws:
       region:
+        # [N] To configure the AWS region, we use the Spring Cloud AWS static region configuration.
         static: us-east-1
       sns:
         enabled: false
 
-server:
-  forward-headers-strategy: framework
-
 custom:
   invitation-codes: DUKE, HELLO_WORLD, STRATOSPHERIC
+
+  # [N]:sqs]:share - The queue used to prompt collaboration requests
   sharing-queue: stratospheric-todo-sharing
+
+  # [N]:local]:share - In local configuration, as collaboration requests are sent to fictitious users, we auto-confirm collaborations.
   auto-confirm-collaborations: false

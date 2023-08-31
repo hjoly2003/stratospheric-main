@@ -66,7 +66,8 @@ public class ServiceApp {
     // We're making this parameters stack unique with each deployment by adding a timestamp, because updating an existing
     // parameters stack will fail because the parameters may be used by an old service stack.
     // This means that each update will generate a new parameters stack that needs to be cleaned up manually!
-    long timestamp = System.currentTimeMillis();
+    // [!]long timestamp = System.currentTimeMillis();
+    String timestamp = "202308090709";
     Stack parametersStack = new Stack(app, "ServiceParameters-" + timestamp, StackProps.builder()
       .stackName(applicationEnvironment.prefix("Service-Parameters-" + timestamp))
       .env(awsEnvironment)
@@ -77,7 +78,7 @@ public class ServiceApp {
       .env(awsEnvironment)
       .build());
 
-    // [N]:jpa - We load the database output parameters (SPRING_DATASOURCE_{URL|USERNAME|PASSWORD}) to make them available to Spring Boot. 
+    // [N]:jpa - We load the database output parameters (SPRING_DATASOURCE_{URL|USERNAME|PASSWORD}) to make them available to Spring Boot. This will enable the application to access the database.
     PostgresDatabase.DatabaseOutputParameters databaseOutputParameters =
       PostgresDatabase.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
@@ -90,8 +91,10 @@ public class ServiceApp {
     ActiveMqStack.ActiveMqOutputParameters activeMqOutputParameters =
       ActiveMqStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
+    // [N] Provides the list of groups from which ingress is allowed.
     List<String> securityGroupIdsToGrantIngressFromEcs = Arrays.asList(
       databaseOutputParameters.getDatabaseSecurityGroupId(),
+      // [N]:mq - To configure our application to access the MQ broker we need to add the message broker’s security group to the list of groups from which ingress is allowed.
       activeMqOutputParameters.getActiveMqSecurityGroupId()
     );
 
@@ -114,8 +117,9 @@ public class ServiceApp {
         .withCpu(512)
         .withMemory(1024)
 
-        // [N]:security]:cognito - The Service construct of our cdk-constructs library takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
+        // [N]:security - The Service construct of our cdk-constructs library takes a list of PolicyStatement objects, which are needed for configuring the access to internal AWS resources for our application.
         .withTaskRolePolicyStatements(List.of(
+          // [N]:sqs - The following gives our application the necessary permissions to send, receive, and delete messages for any Amazon SQS queue as we’ve used the * wildcard.
           PolicyStatement.Builder.create()
             .sid("AllowSQSAccess")
             .effect(Effect.ALLOW)
@@ -133,25 +137,27 @@ public class ServiceApp {
               "sqs:ChangeMessageVisibility",
               "sqs:GetQueueAttributes"))
             .build(),
+            
           // [N]:cognito - The following policy allows all operations (like creating a user) on cognito-idp (IdP: identity Provider)
           PolicyStatement.Builder.create()
             .sid("AllowCreatingUsers")
             .effect(Effect.ALLOW)
             .resources(
+              // [N] The cognito-identity prefix refers to Identity Pools.
               List.of(String.format("arn:aws:cognito-idp:%s:%s:userpool/%s", region, accountId, cognitoOutputParameters.getUserPoolId()))
             )
             .actions(List.of("cognito-idp:AdminCreateUser")).build(),
+
+          // [N]:ses - the ECS task role requires sufficient permissions for the AWS SES API
           PolicyStatement.Builder.create()
             .sid("AllowSendingEmails")
             .effect(Effect.ALLOW)
             .resources(
               List.of(String.format("arn:aws:ses:%s:%s:identity/hjolystratos.net", region, accountId))
             )
-            .actions(List.of(
-              "ses:SendEmail",
-              "ses:SendRawEmail"
-            ))
-            .build(),
+            .actions(List.of("ses:SendEmail", "ses:SendRawEmail")).build(),
+
+          // [N]:nosql - Add a new IAM PolicyStatement for the role assumed by our sample Todo application to be allowed to create new DynamoDB tables and items in those tables.
           PolicyStatement.Builder.create()
             .sid("AllowDynamoTableAccess")
             .effect(Effect.ALLOW)
@@ -167,6 +173,7 @@ public class ServiceApp {
               "dynamodb:BatchWriteGet"
               ))
             .build(),
+
           PolicyStatement.Builder.create()
             .sid("AllowSendingMetricsToCloudWatch")
             .effect(Effect.ALLOW)
@@ -186,14 +193,17 @@ public class ServiceApp {
   }
 
   /**
+   * [N] Environment variables to be passed to the service stack.<p/>
+   * Eventually the service stack will make them available to the Spring context of the application.
    * @param scope
-   * @param databaseOutputParameters
-   * @param cognitoOutputParameters
-   * @param messagingOutputParameters
-   * @param activeMqOutputParameters
+   * @param databaseOutputParameters [N]:rds
+   * @param cognitoOutputParameters [N]:security]:cognito
+   * @param messagingOutputParameters [N]:sqs
+   * @param activeMqOutputParameters [N]:mq - Output parameeters of the {@code ActiveMqStack}
    * @param springProfile
    * @param environmentName
    * @return [N]:jpa A map of all environment variables that should be injected into the Docker container of our Spring Boot app.
+   * @see dev.stratospheric.cdk.Service The stratospheric cdk Service constructor line 178.
    */
   static Map<String, String> environmentVariables(
     Construct scope,
@@ -232,9 +242,12 @@ public class ServiceApp {
     vars.put("COGNITO_PROVIDER_URL", cognitoOutputParameters.getProviderUrl());
 
     vars.put("TODO_SHARING_QUEUE_NAME", messagingOutputParameters.getTodoSharingQueueName());
+
+    // [N]:mq - Adds some of the output parameters of the ActiveMqStack as environment variables.
     vars.put("WEB_SOCKET_RELAY_ENDPOINT", activeMqOutputParameters.getStompEndpoint());
     vars.put("WEB_SOCKET_RELAY_USERNAME", activeMqOutputParameters.getActiveMqUsername());
     vars.put("WEB_SOCKET_RELAY_PASSWORD", activeMqOutputParameters.getActiveMqPassword());
+
     vars.put("ENVIRONMENT_NAME", environmentName);
 
     return vars;

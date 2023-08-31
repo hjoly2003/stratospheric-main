@@ -56,6 +56,10 @@ public class Todo {
   @JoinColumn(name = "todo_id")
   private List<TodoCollaborationRequest> collaborationRequests = new ArrayList<>();
 
+  /**
+   * [N]:share - A many-to-many relationship as a todo can have multiple collaborators, and one person can
+collaborate on numerous todos.
+   */
   @ManyToMany
   @JoinTable(name = "todo_collaboration",
     joinColumns = @JoinColumn(name = "todo_id"),

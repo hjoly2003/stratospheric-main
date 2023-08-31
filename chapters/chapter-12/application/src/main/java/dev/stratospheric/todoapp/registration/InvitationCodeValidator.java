@@ -1,9 +1,9 @@
 package dev.stratospheric.todoapp.registration;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Set;
 
 public class InvitationCodeValidator implements ConstraintValidator<ValidInvitationCode, String> {

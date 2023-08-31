@@ -19,20 +19,41 @@ import software.amazon.awscdk.services.ec2.CfnSecurityGroup;
 import software.amazon.awscdk.services.ssm.StringParameter;
 import software.constructs.Construct;
 
+/**
+ * [N]:mq
+ */
 public class ActiveMqStack extends Stack {
 
+  /** [N] To connect to the broker from the Spring Boot application backend. */
   private static final String PARAMETER_USERNAME = "activeMqUsername";
   private static final String PARAMETER_PASSWORD = "activeMqPassword";
+
   private static final String PARAMETER_AMQP_ENDPOINT = "amqpEndpoint";
+  
+  /** [N] The STOMP endpoint URL is used or connecting from our Thymeleaf frontend via JavaScript and WebSocket. */
   private static final String PARAMETER_STOMP_ENDPOINT = "stompEndpoint";
+
+  /** [N] The security group ID is used to refer to our broker’s security group when allowing ingress access from our application. */
   private static final String PARAMETER_SECURITY_GROUP_ID = "activeMqSecurityGroupId";
 
   private final ApplicationEnvironment applicationEnvironment;
   private final CfnBroker broker;
   private final String username;
   private final String password;
+
+  /**
+   * [N] A specific security group for our ActiveMQ stack. It's created using CDK’s {@code CfnSecurityGroup.Builder}.
+   */
   private final String securityGroupId;
 
+  /**
+   * 
+   * @param scope
+   * @param id
+   * @param awsEnvironment
+   * @param applicationEnvironment
+   * @param username [N]:mq - The user that should gain access to our ActiveMQ instance. Note: the password is generated internally via a {@code PasswordGenerator}.
+   */
   public ActiveMqStack(
     final Construct scope,
     final String id,
@@ -53,6 +74,7 @@ public class ActiveMqStack extends Stack {
     this.username = username;
     this.password = generatePassword();
 
+    // [N]:statfull]:mq - Create a list of users that should gain access to our ActiveMQ instance.
     List<User> userList = new ArrayList<>();
     userList.add(new User(
       username,
@@ -62,6 +84,7 @@ public class ActiveMqStack extends Stack {
     Network.NetworkOutputParameters networkOutputParameters = Network.getOutputParametersFromParameterStore(this, applicationEnvironment.getEnvironmentName());
 
     CfnSecurityGroup amqSecurityGroup = CfnSecurityGroup.Builder.create(this, "amqSecurityGroup")
+      // [N] We supply the ID from our already existing VPC (retrieved from a previously deployed Network stack via the NetworkOutputParameters class). This will make sure our ActiveMQ instance resides within the same VPC as our main application.
       .vpcId(networkOutputParameters.getVpcId())
       .groupDescription("Security Group for the Amazon MQ instance")
       .groupName(applicationEnvironment.prefix("amqSecurityGroup"))
@@ -74,9 +97,11 @@ public class ActiveMqStack extends Stack {
       .brokerName(applicationEnvironment.prefix("stratospheric-amq-message-broker"))
       .securityGroups(Collections.singletonList(this.securityGroupId))
       .subnetIds(Collections.singletonList(networkOutputParameters.getIsolatedSubnets().get(0)))
+      // [N] To save consts, mq.t3.micro is the smallest & cheapest instance type.
       .hostInstanceType("mq.t3.micro")
       .engineType("ACTIVEMQ")
       .engineVersion("5.16.2")
+      // [N] We choose the default SIMPLE (password-based) authentication strategy.
       .authenticationStrategy("SIMPLE")
       .encryptionOptions(
         CfnBroker.EncryptionOptionsProperty
@@ -84,9 +109,12 @@ public class ActiveMqStack extends Stack {
           .useAwsOwnedKey(true)
           .build()
       )
+      // [N] Pass the userList as the list of valid logins (containing exactly one user in our case) into the ActiveMQ construct to create access credentials.
       .users(userList)
       .publiclyAccessible(false)
+      // [N] Amazon MQ will automatically take care of minor version upgrades.
       .autoMinorVersionUpgrade(true)
+      // [N] Set the broker’s deployment mode to SINGLE_INSTANCE. This is the most simple setup possible, with just a single ActiveMQ instance running for our entire application.
       .deploymentMode("SINGLE_INSTANCE")
       .logs(CfnBroker.LogListProperty
         .builder()
@@ -132,6 +160,10 @@ public class ActiveMqStack extends Stack {
       .getStringValue();
   }
 
+  /**
+   * 
+   * @return [N] a password consisting of 32 characteurs with at least 5 lower-cases, 5 upper-cases, & 5 digits.
+   */
   private String generatePassword() {
     PasswordGenerator passwordGenerator = new PasswordGenerator();
     CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
@@ -146,6 +178,9 @@ public class ActiveMqStack extends Stack {
     return passwordGenerator.generatePassword(32, lowerCaseRule, upperCaseRule, digitRule);
   }
 
+  /**
+   * Exports some output parameters, which we will later pass to our service stack for configuring our Spring Boot application to connect with the ActiveMQ instance.
+   */
   private void createOutputParameters() {
     StringParameter.Builder.create(this, PARAMETER_USERNAME)
       .parameterName(createParameterName(applicationEnvironment, PARAMETER_USERNAME))
@@ -162,6 +197,7 @@ public class ActiveMqStack extends Stack {
       .stringValue(Fn.select(0, this.broker.getAttrAmqpEndpoints()))
       .build();
 
+    // [?] Not used
     String stompEndpointsFailoverString = "failover:(" + Fn.select(0, this.broker.getAttrStompEndpoints()) + "," + Fn.select(1, this.broker.getAttrStompEndpoints()) + ")";
     StringParameter.Builder.create(this, PARAMETER_STOMP_ENDPOINT)
       .parameterName(createParameterName(applicationEnvironment, PARAMETER_STOMP_ENDPOINT))

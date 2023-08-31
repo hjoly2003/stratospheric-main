@@ -32,11 +32,12 @@ class MessagingStack extends Stack {
     this.applicationEnvironment = applicationEnvironment;
 
     this.todoSharingDlq = Queue.Builder.create(this, "todoSharingDlq")
-      .queueName(applicationEnvironment.prefix( "todo-sharing-dead-letter-queue"))
+      .queueName(applicationEnvironment.prefix("todo-sharing-dead-letter-queue"))
       .retentionPeriod(Duration.days(14))
       .build();
 
     this.todoSharingQueue = Queue.Builder.create(this, "todoSharingQueue")
+      // [N] queueName = "<env><app>-todo-sharing-queue" or "staging-todo-app-todo-sharing-queue"
       .queueName(applicationEnvironment.prefix("todo-sharing-queue"))
       // [N] Sets the visibilityTimeout to 30 seconds, which should give our Spring Boot application plenty of time to store the collaboration request in the database and send an email.
       .visibilityTimeout(Duration.seconds(30))
@@ -44,6 +45,7 @@ class MessagingStack extends Stack {
       // [N] We connect the main processing queue with the dead-letter queue by passing the field todoSharingDlq to the DeadLetterQueue builder. 
       .deadLetterQueue(DeadLetterQueue.builder()
         .queue(todoSharingDlq)
+        // [N] Amazon SQS will move the message to the DLQ if our application fails to delete the message from the queue at the fourth processing attempt.
         .maxReceiveCount(3)
         .build())
       .build();
@@ -58,14 +60,14 @@ class MessagingStack extends Stack {
   /**
    * [N] Exposes the name of the SQS queue our application will connect to.<p/>
    * [N] Stores the name of the queue in the SSM parameter store so we can later use it to configure our Spring Boot application. Later on, we can create an AWS CloudWatch alarm to get notified as soon as the first message arrives in this queue.
+   * @see dev.stratospheric.todoapp.collaboration.TodoCollaborationService
    */
   private void createOutputParameters() {
 
-    StringParameter.Builder.create(this, "todoSharingQueueName")
+    StringParameter.Builder.create(this, PARAMETER_TODO_SHARING_QUEUE_NAME)
       .parameterName(createParameterName(applicationEnvironment, PARAMETER_TODO_SHARING_QUEUE_NAME))
       .stringValue(this.todoSharingQueue.getQueueName())
       .build();
-
   }
 
   private static String createParameterName(ApplicationEnvironment applicationEnvironment, String parameterName) {

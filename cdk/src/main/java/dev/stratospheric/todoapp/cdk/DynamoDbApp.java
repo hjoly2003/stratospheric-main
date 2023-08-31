@@ -6,6 +6,9 @@ import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 
+/**
+ * [N]:nosql - Implements a DynamoDB for tracing the user’s journey through our application.
+ */
 public class DynamoDbApp {
 
   public static void main(final String[] args) {
@@ -35,6 +38,7 @@ public class DynamoDbApp {
       .env(awsEnvironment)
       .build());
 
+    // [N]:web-trace - This breadcrumb table is created by the BreadcrumbsDynamoDbTable construct.
     new BreadcrumbsDynamoDbTable(
       dynamoDbStack,
       "BreadcrumbTable",

@@ -12,9 +12,8 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>5.8.2</junit.version>
+    <junit.version>5.10.0</junit.version>
     <cdk-constructs.version>0.1.13</cdk-constructs.version>
-    <log4j2.version>2.18.0</log4j2.version>
   </properties>
 
   <build>
@@ -22,12 +21,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.9.0</version>
+        <version>3.11.0</version>
       </plugin>
     </plugins>
   </build>
 
   <dependencies>
+    <!-- [N] See https://github.com/stratospheric-dev/cdk-constructs -->
     <dependency>
       <groupId>dev.stratospheric</groupId>
       <artifactId>cdk-constructs</artifactId>
