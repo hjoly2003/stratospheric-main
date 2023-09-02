@@ -84,7 +84,9 @@ dependencies {
   // [N]:security]:cognito - Used by Spring Cloud AWS to align all AWS Java SDK versions for communicating with Cognito.
   implementation 'software.amazon.awssdk:cognitoidentityprovider'
 
+  // [N]:structured]:log - A library that create logs that CloudWatch can ingest.
   implementation "de.siegmar:logback-awslogs-json-encoder:${logbackAwslogsJsonEncoderVersion}"
+  
   implementation "io.github.wimdeblauwe:error-handling-spring-boot-starter:${errorHandlingSpringBootStarterVersion}"
 
   developmentOnly 'org.springframework.boot:spring-boot-devtools'

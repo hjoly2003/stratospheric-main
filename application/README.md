@@ -61,12 +61,22 @@ The stack named staging-todo-app-Canary failed creation, it may need to be manua
 
 * ]:mq]:local - For local development, we'll configure an ActiveMQ instance running locally, so we don’t have to connect to a remote instance.
 
+
 ### Chapter 14. Tracing User Actions with Amazon DynamoDB
 
 * ]:nosql]:web-trace - We're tracing the user’s journey through our application. It'll show which links are clicked the most and which features are used most frequently.
     * ]:spring-evnt - Using [Spring Events](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#context-functionalityevents), we’ll generate this data by emitting events whenever a user executes a relevant action in our application. We’ll use an @EventListener to store this data in a DynamoDB table mapped to an entity in our application.
 
 * ]:local - We add dynamodb as an additional service to our LocalStack environment configuration.
+
+
+### Chapter 15. Structured Logging with Amazon CloudWatch
+
+* ]:log - In this chapter, we focus on application logs, because they are the most important in day-to-day operations. We implement a logging solution with:
+    * ]:structured - structured logs in JSON format and 
+    * ]:custom-fields - custom fields for logging
+The result will allow us to search and filter structured log events from our Todo app with Amazon CloudWatch - Amazon’s main observability service, providing log query and dashboard capabilities for log data.
+
 
 
 ### Prerequisites

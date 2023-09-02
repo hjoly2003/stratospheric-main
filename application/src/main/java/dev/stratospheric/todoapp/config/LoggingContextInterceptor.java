@@ -11,12 +11,16 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
- *  [N]:cognito
+ *  [N]:cognito]:log]:custom-fields - Intercepts all incoming web requests to add the name of a user to each log event.
  */
 class LoggingContextInterceptor implements HandlerInterceptor {
 
   private final Logger logger = LoggerFactory.getLogger(LoggingContextInterceptor.class);
 
+  /**
+   * Gets the logged-in user who initiated the request, and then add its name to the MDC.<p/>
+ * The "Message Diagnostic Context" (or MDC in short) which is supported by SLF4J, the default logger of Spring Boot. MDC allows us to add custom fields to log events.
+   */
   @Override
   public boolean preHandle(
     final HttpServletRequest request,
@@ -26,6 +30,7 @@ class LoggingContextInterceptor implements HandlerInterceptor {
     // [N] Once a user logged in, Spring Security creates a Principal in the form of an OidcUser.
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String userId = getUserIdFromPrincipal(authentication.getPrincipal());
+    // [N] Adds the username to the userId field in the MDC. 
     MDC.put("userId", userId);
     return true;
   }
@@ -54,6 +59,10 @@ class LoggingContextInterceptor implements HandlerInterceptor {
     return "unknown";
   }
 
+  /**
+   * Removes the MDC once the request has been processed.<p/>
+   * This removal is required since the MDC is attached to the current thread, and it might be reused later on (because it’s part of a thread pool).
+   */
   @Override
   public void afterCompletion(
     final HttpServletRequest request,

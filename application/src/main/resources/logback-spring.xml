@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
+  <!-- [N]:structured]:log - Configures logback, the default Spring Boot logger to use the awslogs-json-encoder library. -->
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
+  <!-- [N] The  <appender> named JSON that uses the AwsJsonLogEncoder from the awslogs-json-encoder library we just imported. All log events sent to this appender will generate JSON-formatted logs. -->
   <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="de.siegmar.logbackawslogsjsonencoder.AwsJsonLogEncoder"/>
   </appender>
 
+  <!-- [N] If the application is running in the dev profile, we send all log events to the console. -->
   <springProfile name="dev">
     <root level="INFO">
       <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
 
+  <!-- [N] If the application is running in the aws profile, we send all logs to the JSON encoder to produce JSON-formatted logs. -->
   <springProfile name="aws">
     <root level="INFO">
       <appender-ref ref="JSON"/>

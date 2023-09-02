@@ -183,8 +183,12 @@ public class ServiceApp {
         ))
         // [N]:security - Ensures that users are always routed to the same service instance they were assigned to on their first request. Otherwize, having many instances of the application running in parallel exposes us to the risk of a session validation failure  or user authentication failure as these are node dependent (see "Shortcomings when Scaling Out" from Stratospheric chapter 10).
         .withStickySessionsEnabled(true)
+        
         .withHealthCheckPath("/actuator/health")
+        
+        // [N]:logs - Defines the awslogs-datetime-format to be used by the "Service" stack defined in the stratospheric.cdk library (see https://github.com/stratospheric-dev/stratospheric/blob/main/cdk/src/main/java/dev/stratospheric/todoapp/cdk/ServiceApp.java).
         .withAwsLogsDateTimeFormat("%Y-%m-%dT%H:%M:%S.%f%z")
+
         .withHealthCheckIntervalSeconds(30), // needs to be long enough to allow for slow start up with low-end computing instances
 
       Network.getOutputParametersFromParameterStore(serviceStack, applicationEnvironment.getEnvironmentName()));
